@@ -1,6 +1,6 @@
 # 08. Dependencies
 
-**Status:** Draft | **Implements:** NFR-14, 16, 17
+**Status:** Approved (Gate 1, 2026-11-05) | **Implements:** NFR-14, 16, 17
 
 "Latest" was read from the npm registry on 2026-11-05. **Exact pins are set at Gate 2**, after the spikes. A dependency not listed here must be added here before it's installed.
 

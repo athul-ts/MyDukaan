@@ -1,6 +1,6 @@
 # 07. Performance and Security
 
-**Status:** Draft | **Implements:** NFR-4, 5, 6, 7, 8, 9, 10, 11, 12; DEL-5
+**Status:** Approved (Gate 1, 2026-11-05) | **Implements:** NFR-4, 5, 6, 7, 8, 9, 10, 11, 12; DEL-5
 
 ## Performance budgets
 

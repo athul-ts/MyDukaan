@@ -1,6 +1,6 @@
 # 05. Storefront Widget
 
-**Status:** Draft | **Implements:** FR-2, 6, 7, 11-15; NFR-1, 2, 4, 6, 7, 9, 18
+**Status:** Approved (Gate 1, 2026-11-05) | **Implements:** FR-2, 6, 7, 11-15; NFR-1, 2, 4, 6, 7, 9, 18
 
 A Theme App Extension **app block** restricted to product templates (`enabled_on: {templates: ["product"]}`). The merchant places it in the theme editor. A Preact bundle renders the timer.
 

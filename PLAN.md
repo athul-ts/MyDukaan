@@ -8,8 +8,8 @@ Spec-driven delivery of the Countdown Timer + Analytics Shopify app, with **24 h
 
 | Step | Output | Owner | Budget | Status |
 |---|---|---|---|---|
-| 1. Write spec pack | `specs/`, `PLAN.md`, `CLAUDE.md`, `.claude/` | Claude | 1.5h | Done, awaiting review |
-| **Gate 1: spec review** | Comments resolved, specs set to `Approved` | **User** | 0.5h | **Open** |
+| 1. Write spec pack | `specs/`, `PLAN.md`, `CLAUDE.md`, `.claude/` | Claude | 1.5h | Done |
+| **Gate 1: spec review** | Comments resolved, specs set to `Approved` | **User** | 0.5h | **Cleared 2026-11-05** |
 | 2. Prerequisites | Checklist below | **User** | 0.5h | In progress |
 | 3. Spikes S1-S4 | [specs/10-spikes.md](specs/10-spikes.md) filled in, specs amended | Claude + user logins | 2h | Not started |
 | **Gate 2: dependencies cleared** | Versions pinned, spikes closed, specs marked v1.0 | **User** | 0.25h | Not started |
@@ -22,8 +22,8 @@ Total is about 19h, leaving a small buffer.
 
 **Gate 1 is cleared when:**
 - Each item in the [Gate 1 decisions list](specs/README.md#gate-1-decisions) has an answer (done)
-- Every spec shows `Status: Approved`, except `10-spikes`, which stays Open until Gate 2
-- `/spec-trace` reports no PRD line without a requirement
+- Every spec shows `Status: Approved` (done), except `10-spikes`, which stays Open until Gate 2
+- No PRD line lacks a requirement (done, confirmed by `/spec-review`)
 
 **Gate 2 is cleared when:**
 - All prerequisites below are ticked
