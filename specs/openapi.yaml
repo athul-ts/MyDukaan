@@ -1,0 +1,382 @@
+openapi: 3.0.3
+info:
+  title: Countdown Timer API
+  version: 0.1.0
+  description: >-
+    Contract for the admin and storefront APIs. Behaviour is specified in
+    04-api.md. Status: Draft.
+servers:
+  - url: /
+tags:
+  - name: Admin
+    description: Called from the embedded admin with an App Bridge session token.
+  - name: Storefront
+    description: >-
+      Called by the widget through the Shopify app proxy, at /apps/countdown on
+      the shop's domain. Shopify adds shop, timestamp, signature and path_prefix.
+paths:
+  /api/timers:
+    get:
+      tags: [Admin]
+      operationId: listTimers
+      security: [{ sessionToken: [] }]
+      parameters:
+        - { name: status, in: query, schema: { $ref: '#/components/schemas/TimerStatus' } }
+        - { name: q, in: query, schema: { type: string, maxLength: 80 } }
+        - name: sort
+          in: query
+          schema: { type: string, enum: [createdAt_desc, endAt_asc, name_asc], default: createdAt_desc }
+        - { name: page, in: query, schema: { type: integer, minimum: 1, default: 1 } }
+        - { name: pageSize, in: query, schema: { type: integer, minimum: 1, maximum: 50, default: 20 } }
+      responses:
+        '200':
+          description: Page of timers
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [timers, page, pageSize, total, hintSync]
+                properties:
+                  timers:
+                    type: array
+                    items: { $ref: '#/components/schemas/AdminTimer' }
+                  page: { type: integer }
+                  pageSize: { type: integer }
+                  total: { type: integer }
+                  hintSync: { $ref: '#/components/schemas/HintSync' }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '429': { $ref: '#/components/responses/Error' }
+        '500': { $ref: '#/components/responses/Error' }
+    post:
+      tags: [Admin]
+      operationId: createTimer
+      security: [{ sessionToken: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/TimerInput' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TimerWriteResult' }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '422': { $ref: '#/components/responses/Error' }
+        '429': { $ref: '#/components/responses/Error' }
+        '500': { $ref: '#/components/responses/Error' }
+  /api/timers/{id}:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: string } }
+    get:
+      tags: [Admin]
+      operationId: getTimer
+      security: [{ sessionToken: [] }]
+      responses:
+        '200':
+          description: Timer
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [timer]
+                properties:
+                  timer: { $ref: '#/components/schemas/AdminTimer' }
+        '401': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '429': { $ref: '#/components/responses/Error' }
+        '500': { $ref: '#/components/responses/Error' }
+    put:
+      tags: [Admin]
+      operationId: updateTimer
+      security: [{ sessionToken: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/TimerInput' }
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TimerWriteResult' }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '422': { $ref: '#/components/responses/Error' }
+        '429': { $ref: '#/components/responses/Error' }
+        '500': { $ref: '#/components/responses/Error' }
+    delete:
+      tags: [Admin]
+      operationId: deleteTimer
+      security: [{ sessionToken: [] }]
+      responses:
+        '200':
+          description: Deleted, along with its stats
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [deleted, hintSync]
+                properties:
+                  deleted: { type: boolean, enum: [true] }
+                  hintSync: { $ref: '#/components/schemas/HintSync' }
+        '401': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '429': { $ref: '#/components/responses/Error' }
+        '500': { $ref: '#/components/responses/Error' }
+  /api/shop:
+    get:
+      tags: [Admin]
+      operationId: getShop
+      security: [{ sessionToken: [] }]
+      responses:
+        '200':
+          description: Shop details used by the form
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [ianaTimezone, domain]
+                properties:
+                  ianaTimezone: { type: string, example: Asia/Kolkata }
+                  domain: { type: string, example: example.myshopify.com }
+        '401': { $ref: '#/components/responses/Error' }
+        '429': { $ref: '#/components/responses/Error' }
+        '500': { $ref: '#/components/responses/Error' }
+  /api/hint/sync:
+    post:
+      tags: [Admin]
+      operationId: syncHint
+      description: Rebuilds the storefront hint from MongoDB.
+      security: [{ sessionToken: [] }]
+      responses:
+        '200':
+          description: Sync attempted. A failed sync is reported in the body, and stays stored for the shop
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [hintSync]
+                properties:
+                  hintSync: { $ref: '#/components/schemas/HintSync' }
+        '401': { $ref: '#/components/responses/Error' }
+        '429': { $ref: '#/components/responses/Error' }
+        '500': { $ref: '#/components/responses/Error' }
+  /proxy/timers:
+    get:
+      tags: [Storefront]
+      operationId: getStorefrontTimers
+      security: [{ appProxySignature: [] }]
+      parameters:
+        - name: productId
+          in: query
+          required: true
+          schema: { type: string, pattern: '^\d+$' }
+        - name: collectionIds
+          in: query
+          description: Up to 50 numeric IDs, comma-separated and sorted.
+          schema: { type: string, pattern: '^\d+(,\d+)*$' }
+      responses:
+        '200':
+          description: Up to 3 candidates in selection order, including the top live timer if any; empty when none apply.
+          headers:
+            Cache-Control:
+              schema: { type: string, example: 'public, max-age=30, stale-while-revalidate=120' }
+            ETag:
+              schema: { type: string }
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [timers]
+                properties:
+                  timers:
+                    type: array
+                    maxItems: 3
+                    items: { $ref: '#/components/schemas/PublicTimer' }
+        '304':
+          description: Not modified
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '429': { $ref: '#/components/responses/Error' }
+        '500': { $ref: '#/components/responses/Error' }
+  /proxy/impressions:
+    post:
+      tags: [Storefront]
+      operationId: recordImpression
+      security: [{ appProxySignature: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ImpressionInput' }
+          text/plain:
+            schema:
+              type: string
+              description: JSON-encoded ImpressionInput, as sent by sendBeacon.
+      responses:
+        '202':
+          description: Accepted
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '429': { $ref: '#/components/responses/Error' }
+        '500': { $ref: '#/components/responses/Error' }
+components:
+  securitySchemes:
+    sessionToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: App Bridge session token.
+    appProxySignature:
+      type: apiKey
+      in: query
+      name: signature
+      description: HMAC-SHA256 added by the Shopify app proxy.
+  responses:
+    Error:
+      description: Error
+      headers:
+        Cache-Control:
+          schema: { type: string, example: no-store }
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+  schemas:
+    TimerStatus:
+      type: string
+      enum: [active, scheduled, expired]
+    HintSync:
+      type: string
+      enum: [ok, failed]
+    Style:
+      type: object
+      additionalProperties: false
+      required: [backgroundColor, textColor, size, position]
+      properties:
+        backgroundColor: { type: string, pattern: '^#[0-9a-fA-F]{6}$' }
+        textColor: { type: string, pattern: '^#[0-9a-fA-F]{6}$' }
+        size: { type: string, enum: [small, medium, large] }
+        position: { type: string, enum: [inline, top_bar, bottom_bar] }
+    Urgency:
+      type: object
+      additionalProperties: false
+      required: [mode, thresholdMinutes]
+      properties:
+        mode: { type: string, enum: [none, color_pulse] }
+        thresholdMinutes: { type: integer, minimum: 1, default: 5 }
+    Resource:
+      type: object
+      additionalProperties: false
+      required: [id, title]
+      properties:
+        id: { type: string, example: 'gid://shopify/Product/123' }
+        title: { type: string, maxLength: 255 }
+    Targeting:
+      type: object
+      additionalProperties: false
+      required: [scope, products, collections]
+      properties:
+        scope: { type: string, enum: [all, products, collections] }
+        products:
+          type: array
+          maxItems: 250
+          items: { $ref: '#/components/schemas/Resource' }
+        collections:
+          type: array
+          maxItems: 250
+          items: { $ref: '#/components/schemas/Resource' }
+    TimerInput:
+      type: object
+      additionalProperties: false
+      description: >-
+        Fixed timers require startAt and endAt. Evergreen timers require
+        durationMinutes. See 02-domain-rules.md for cross-field rules.
+      required: [name, type, style, urgency, targeting]
+      properties:
+        name: { type: string, minLength: 1, maxLength: 80 }
+        type: { type: string, enum: [fixed, evergreen] }
+        startAt: { type: string, format: date-time }
+        endAt: { type: string, format: date-time }
+        durationMinutes: { type: integer, minimum: 1, maximum: 43200 }
+        headline: { type: string, maxLength: 60 }
+        description: { type: string, maxLength: 200 }
+        style: { $ref: '#/components/schemas/Style' }
+        urgency: { $ref: '#/components/schemas/Urgency' }
+        targeting: { $ref: '#/components/schemas/Targeting' }
+    AdminTimer:
+      type: object
+      required: [id, name, type, status, impressions, style, urgency, targeting, createdAt, updatedAt]
+      properties:
+        id: { type: string }
+        name: { type: string }
+        type: { type: string, enum: [fixed, evergreen] }
+        status: { $ref: '#/components/schemas/TimerStatus' }
+        startAt: { type: string, format: date-time, nullable: true }
+        endAt: { type: string, format: date-time, nullable: true }
+        durationMinutes: { type: integer, nullable: true }
+        headline: { type: string }
+        description: { type: string }
+        style: { $ref: '#/components/schemas/Style' }
+        urgency: { $ref: '#/components/schemas/Urgency' }
+        targeting: { $ref: '#/components/schemas/Targeting' }
+        impressions: { type: integer, minimum: 0 }
+        overlapsWith:
+          type: array
+          description: IDs of timers competing for the same target. List responses only, and omitted if the overlap warning is cut.
+          items: { type: string }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+    TimerWriteResult:
+      type: object
+      required: [timer, hintSync]
+      properties:
+        timer: { $ref: '#/components/schemas/AdminTimer' }
+        hintSync: { $ref: '#/components/schemas/HintSync' }
+    PublicTimer:
+      type: object
+      additionalProperties: false
+      description: Explicit allowlist. Nothing else may be exposed publicly.
+      required: [id, type, startAt, endAt, durationMinutes, headline, description, style, urgency]
+      properties:
+        id: { type: string }
+        type: { type: string, enum: [fixed, evergreen] }
+        startAt: { type: string, format: date-time, nullable: true }
+        endAt: { type: string, format: date-time, nullable: true }
+        durationMinutes: { type: integer, nullable: true }
+        headline: { type: string }
+        description: { type: string }
+        style: { $ref: '#/components/schemas/Style' }
+        urgency: { $ref: '#/components/schemas/Urgency' }
+    ImpressionInput:
+      type: object
+      additionalProperties: false
+      required: [timerId]
+      properties:
+        timerId: { type: string, description: 'An unknown or malformed ID returns 404.' }
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code:
+              type: string
+              enum: [BAD_REQUEST, UNAUTHORIZED, NOT_FOUND, VALIDATION_FAILED, RATE_LIMITED, INTERNAL]
+            message: { type: string }
+            details:
+              type: array
+              items:
+                type: object
+                required: [path, message]
+                properties:
+                  path: { type: string }
+                  message: { type: string }
