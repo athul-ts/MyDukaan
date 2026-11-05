@@ -21,12 +21,12 @@
 | `preact` | 11.1.1 | Bundle measured only |
 | `esbuild` | 0.28.2 | Bundle measured only |
 | `zod` | 4.6.7 | **Not installed yet** |
-| `helmet` | 8.3.0 | **Not installed yet,** slice A confirms |
+| `helmet` | 8.3.0 | Ran in the admin in slice A |
 | `express-rate-limit` | 8.7.3 | **Not installed yet** |
 | `date-fns`, `date-fns-tz` | 4.4.0, 3.2.0 | **Not installed yet.** `date-fns-tz` accepts `date-fns` 3 or 4 |
 | `vitest` | 5.1.0 | **Not installed yet** |
 | `supertest` | 7.3.1 | **Not installed yet** |
-| `eslint` | 10.14.0 | **Not installed yet** |
+| `eslint`, `@eslint/js`, `globals` | 10.14.0, see `package.json`, see `package.json` | Slice A |
 
 ## Environment
 
@@ -59,13 +59,13 @@
 |---|---|---|
 | Polaris web components | CDN `polaris-2.js` | Stable 2.x channel, no npm package. Replaces `@shopify/polaris` |
 | App Bridge | CDN `app-bridge.js` | Unversioned; Shopify serves the latest. Provides `shopify.resourcePicker` (confirmed in S4) |
-| `@shopify/app-bridge-react` | Template ^4.1.3 (latest 4.2.14) | Keep if the template's authenticated fetch and routing need it; otherwise remove |
+| `@shopify/app-bridge`, `@shopify/app-bridge-react` | Removed | S4 showed the CDN script covers fetch and the resource picker |
 | `react`, `react-dom` | Template ^18.2.0 (latest 19.3.1) | Stay on 18. S4 showed no need for 19 |
-| `react-router-dom` | Template ^6.3.0 (latest 7.18.5) | Leave on the template's version |
+| `react-router-dom` | Removed | The admin has one route, as create and edit use a modal |
 | `react-query` | Template ^3.34.19 | Leave on the template's version |
 | `vite` | Template ^5.4.0 (latest 8.3.5) | Leave on the template's version |
 | `date-fns`, `date-fns-tz` | To confirm at Gate 2 | Shop timezone conversion |
-| **Removed** | `@shopify/polaris`, its i18n and icon packages | Deprecated (F1) |
+| **Removed** | `@shopify/polaris`, `i18next` and `formatjs` packages, `stylelint` | Deprecated (F1), or unused as translated text is out of scope |
 
 The admin's other template packages stay on the template's versions, because upgrading them adds risk without helping any requirement in a time-boxed build.
 
@@ -83,6 +83,7 @@ The admin's other template packages stay on the template's versions, because upg
 | `vitest` | 5.1.0 | Needs Node 22.12+, 24, or 26+ |
 | `supertest` | 7.3.1 | API integration tests |
 | `eslint` | 10.14.0 | Needs Node ^20.19, ^22.13 or ≥24 |
+| `@eslint/js`, `globals` | Latest at slice A | Recommended rules and browser and Node globals for the flat config |
 
 `mongodb-memory-server` isn't used. Tests run against a dedicated database on the local MongoDB, which avoids a large binary download and matches the real server.
 

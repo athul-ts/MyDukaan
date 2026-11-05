@@ -1,0 +1,33 @@
+{
+  "name": "mydukaan-countdown-timer",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "main": "web/index.js",
+  "type": "module",
+  "engines": {
+    "node": ">=24.0.0 <25.0.0"
+  },
+  "scripts": {
+    "shopify": "shopify",
+    "build": "shopify app build",
+    "dev": "shopify app dev",
+    "info": "shopify app info",
+    "generate": "shopify app generate",
+    "deploy": "shopify app deploy",
+    "lint": "eslint ."
+  },
+  "workspaces": [
+    "extensions/*",
+    "web",
+    "web/frontend"
+  ],
+  "dependencies": {
+    "@shopify/cli": "5.0.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "eslint": "10.14.0",
+    "globals": "17.14.0"
+  }
+}

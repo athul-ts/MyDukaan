@@ -42,7 +42,7 @@ The 200ms target applies to the app's processing time. The dev tunnel and Shopif
 
 ## HTTP headers
 
-`helmet` is used on API responses, **with its default `Content-Security-Policy` and `X-Frame-Options` disabled**. Those defaults would stop the app loading inside the Shopify admin iframe. The Shopify library should set the required `frame-ancestors` per shop instead, which S1 verifies.
+`helmet` is used on API responses, **with its default `Content-Security-Policy` and `X-Frame-Options` disabled**. Those defaults would stop the app loading inside the Shopify admin iframe. The Shopify library sets the required `frame-ancestors` per shop instead, which slice A confirmed in the admin.
 
 ## Trust boundaries
 

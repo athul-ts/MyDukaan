@@ -1,0 +1,28 @@
+{
+  "name": "mydukaan-countdown-timer-web",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=24.0.0 <25.0.0"
+  },
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development nodemon index.js --ignore ./frontend",
+    "serve": "cross-env NODE_ENV=production node index.js"
+  },
+  "dependencies": {
+    "@shopify/shopify-api": "15.0.1",
+    "@shopify/shopify-app-express": "8.0.3",
+    "@shopify/shopify-app-session-storage-mongodb": "8.0.1",
+    "compression": "1.8.2",
+    "cross-env": "10.1.0",
+    "express": "5.3.0",
+    "helmet": "8.3.0",
+    "mongoose": "9.12.0",
+    "serve-static": "2.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "3.1.14"
+  }
+}

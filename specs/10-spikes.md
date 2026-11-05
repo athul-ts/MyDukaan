@@ -156,6 +156,6 @@ Proxied requests carry `shop`, `logged_in_customer_id`, `path_prefix`, `timestam
 
 | Item | During | Result |
 |---|---|---|
-| `helmet` config doesn't break admin embedding | S1 | `shopify.cspHeaders()` sets `frame-ancestors` and the app loads embedded. Not yet run with `helmet` added, so slice A confirms it |
+| `helmet` config doesn't break admin embedding | S1 | `shopify.cspHeaders()` sets `frame-ancestors` and the app loads embedded. Slice A confirmed this with `helmet` on, with its CSP and frame options disabled |
 | Preact 11 size against the 15KB target | S2 | 5.78KB gzipped for a small test widget |
 | `shopify://admin/themes/current/editor` deep link format | S2 | The `https://admin.shopify.com/store/{store}/themes/current/editor?template=product&addAppBlockId={client_id}/{block_handle}` form added the block, in its own section. The `shopify://` form still needs testing from inside the app |

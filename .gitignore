@@ -1,0 +1,30 @@
+# Environment configuration
+.env
+.env.*
+!.env.example
+
+# Dependencies
+node_modules
+
+# Test coverage
+coverage
+
+# OS files
+.DS_Store
+
+# Logs
+logs
+*.log
+
+# Vite build output
+dist/
+
+# Extension build output
+extensions/*/build
+
+# Files created by shopify app dev
+.shopify/*
+.shopify.lock
+
+# Personal Claude Code settings
+.claude/settings.local.json
