@@ -18,5 +18,6 @@ export const config = {
   port: parseInt(process.env.BACKEND_PORT || process.env.PORT || "3000", 10),
   isProduction: process.env.NODE_ENV === "production",
   apiKey: process.env.SHOPIFY_API_KEY || "",
+  apiSecret: process.env.SHOPIFY_API_SECRET || "",
   mongo: { url: mongoUrl.toString(), database },
 };

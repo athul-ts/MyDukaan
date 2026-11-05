@@ -69,7 +69,7 @@ PRD sections 1 and 2 also state audience and user classes. These set context and
 | F3 | An async fetch can't satisfy "no CLS" alone: reserved space leaves a gap, and collapsing it is a shift | App-owned metafield hint, so Liquid reserves space only where a timer applies | **Decided** |
 | F4 | Evergreen uses localStorage (§4.1), which has no session end, but must reset on "session end" | 30 minutes idle counts as session end | **Decided** |
 | F5 | Widget size is ~15KB (§4.5) vs <30KB (§5.3). Shopify's guidance suggests 10KB compressed JS | Target 15KB, build fails above 30KB, 10KB tracked as advisory | Proposed |
-| F6 | "Single API call" (§5.1) vs impression tracking, which needs a write. A cached read can't count impressions either | One call for config, plus a separate best-effort beacon | Proposed |
+| F6 | "Single API call" (§5.1) vs impression tracking, which needs a write. A cached read can't count impressions either | One call for config, plus a separate best-effort beacon | **Decided** |
 | F7 | "CLI 3.0" and template `^3.0.0` vs current CLI 5.0.1 | Treat 3.0 as the minimum; use current CLI; confirm in S1. The README states this as an assumption | **Decided** |
 | F8 | The mockup lacks timer type, targeting and evergreen duration, and has one colour where §3 says "colors" | The form has the PRD's fields, inside the mockup's modal. Otherwise the mockup is a style reference | Proposed |
 
@@ -82,11 +82,11 @@ Also noted: §8 reads "48hrs days" with no start date. The user confirmed **24 h
 | G1 | Several timers match one product | Product > collection > all, then soonest end, then latest update. One timer shows | **Decided** |
 | G2 | Evergreen never expires, so it can only be stopped by deleting | Follow PRD §4.4: active, scheduled and expired only. No pause. Stopping a timer means deleting it, which also removes its impressions | **Decided** (user asked for a recommendation per the PRD) |
 | G3 | Timezone of entered dates | Store UTC. Form uses the shop's `ianaTimezone` | Proposed |
-| G4 | A cached response hides a timer starting within the cache window | Response carries ordered candidates, including those starting within 5 minutes. Client picks the live one | Proposed |
+| G4 | A cached response hides a timer starting within the cache window | Response carries ordered candidates, including those starting within 5 minutes. Client picks the live one | **Decided** |
 | G5 | Fixed timer reaches zero mid-view | Next live candidate, otherwise "Offer ended" in the same box. Bars hide | Proposed |
 | G6 | What an impression is | At least 50% visible, once per page view | Proposed |
-| G7 | Merchant edits an evergreen timer | Storage key carries the duration, so visitors restart only when the duration changes | Proposed |
-| G8 | Hint goes stale when a timer expires, since nothing runs on a schedule | Hint stores start and end per entry, and Liquid compares them with `now` | Proposed |
+| G7 | Merchant edits an evergreen timer | Storage key carries the duration, so visitors restart only when the duration changes | **Decided** |
+| G8 | Hint goes stale when a timer expires, since nothing runs on a schedule | Hint stores start and end per entry, and Liquid compares them with `now` | **Decided** |
 | G9 | Whether the timer applies a discount | Display only. Stated as a README assumption | Proposed |
 | G10 | A wrong client clock breaks "all users see the same countdown" | Accepted: correction is unreliable under caching. Discussed in Loom | Proposed |
 | G11 | Timer lapses while Shopify's cached page still has old Liquid | Accepted: a mismatch until the page cache refreshes, with the duration measured in S2. Widget still validates against API data | Proposed |

@@ -20,8 +20,15 @@ export default [
   },
   js.configs.recommended,
   {
-    files: ["web/**/*.js", "shared/**/*.js", "scripts/**/*.js", "*.mjs"],
+    files: ["web/**/*.js", "shared/**/*.js", "scripts/**/*.js", "tests/**/*.js", "*.{js,mjs}"],
     languageOptions: { globals: globals.node },
+    rules: {
+      // Express handlers and destructured omissions mark unused values with a leading underscore.
+      "no-unused-vars": [
+        "error",
+        { argsIgnorePattern: "^_", varsIgnorePattern: "^_", caughtErrors: "none" },
+      ],
+    },
   },
   {
     files: ["web/frontend/**/*.{js,jsx}", "widget/**/*.{js,jsx}"],
