@@ -9,6 +9,24 @@ const TIME_PATTERN = /^([01]\d|2[0-3]):[0-5]\d$/;
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 export const HEX_COLOR = /^#[0-9a-fA-F]{6}$/;
 
+const pad = (number) => String(number).padStart(2, "0");
+
+/**
+ * The time picker's columns. A typed "13:30" opens as 1, 30, PM. With no valid time typed, it
+ * opens at the working day's start, 9:00 AM.
+ */
+export function toClock(value) {
+  if (!TIME_PATTERN.test(value)) return { hour: 9, minute: 0, period: "AM" };
+  const [hours, minute] = value.split(":").map(Number);
+  return { hour: hours % 12 || 12, minute, period: hours < 12 ? "AM" : "PM" };
+}
+
+/** Back to the form's HH:mm. 12 AM is midnight and 12 PM is noon. */
+export function fromClock({ hour, minute, period }) {
+  const hours = (hour % 12) + (period === "PM" ? 12 : 0);
+  return `${pad(hours)}:${pad(minute)}`;
+}
+
 export function emptyForm() {
   return {
     name: "",

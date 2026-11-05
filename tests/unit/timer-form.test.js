@@ -6,6 +6,8 @@ import {
   formatTargeting,
   formFromTimer,
   formToPayload,
+  fromClock,
+  toClock,
   validateForm,
 } from "../../web/frontend/timerForm.js";
 import { timerInputSchema } from "../../shared/validation.js";
@@ -194,5 +196,35 @@ describe("display helpers", () => {
     expect(formatTargeting({ ...base, scope: "all" })).toBe("All products");
     expect(formatTargeting({ ...base, scope: "products", products: [1, 2, 3] })).toBe("3 products");
     expect(formatTargeting({ ...base, scope: "collections", collections: [1] })).toBe("1 collection");
+  });
+});
+
+describe("time picker conversion", () => {
+  it("opens a typed time in the right columns", () => {
+    expect(toClock("13:30")).toEqual({ hour: 1, minute: 30, period: "PM" });
+    expect(toClock("09:07")).toEqual({ hour: 9, minute: 7, period: "AM" });
+    expect(toClock("00:00")).toEqual({ hour: 12, minute: 0, period: "AM" });
+    expect(toClock("12:15")).toEqual({ hour: 12, minute: 15, period: "PM" });
+    expect(toClock("23:59")).toEqual({ hour: 11, minute: 59, period: "PM" });
+  });
+
+  it("opens at 9:00 AM when no valid time is typed", () => {
+    expect(toClock("")).toEqual({ hour: 9, minute: 0, period: "AM" });
+    expect(toClock("9am")).toEqual({ hour: 9, minute: 0, period: "AM" });
+    expect(toClock("24:00")).toEqual({ hour: 9, minute: 0, period: "AM" });
+  });
+
+  it("turns the columns back into HH:mm, with 12 AM as midnight and 12 PM as noon", () => {
+    expect(fromClock({ hour: 1, minute: 30, period: "PM" })).toBe("13:30");
+    expect(fromClock({ hour: 12, minute: 0, period: "AM" })).toBe("00:00");
+    expect(fromClock({ hour: 12, minute: 5, period: "PM" })).toBe("12:05");
+    expect(fromClock({ hour: 9, minute: 7, period: "AM" })).toBe("09:07");
+  });
+
+  it("round-trips every minute of the day", () => {
+    for (let minutes = 0; minutes < 24 * 60; minutes++) {
+      const value = `${String(Math.floor(minutes / 60)).padStart(2, "0")}:${String(minutes % 60).padStart(2, "0")}`;
+      expect(fromClock(toClock(value))).toBe(value);
+    }
   });
 });

@@ -43,7 +43,7 @@ The resource picker opens above the modal (confirmed in S4), so no workaround is
 |---|---|---|
 | Basics | Name, Headline, Promotion description | `s-text-field`, `s-text-area` |
 | Type | Fixed or Evergreen; switching shows the relevant fields | `s-choice-list` |
-| Schedule (fixed) | Start date and time, End date and time | `s-date-field`, and `s-text-field` with HH:mm validation, as no time component exists (S4) |
+| Schedule (fixed) | Start date and time, End date and time | `s-date-field`, and a time field built the way Polaris builds its colour field, as no time component exists (S4): an `s-text-field` with a clock icon and HH:mm validation, so any minute can be typed, plus a button in its `accessory` slot that opens an `s-popover`. The popover has scrolling hour (1-12), minute (00-59) and AM/PM columns, opening on the current value or 9:00 AM, with Cancel and OK. Only OK changes the field. Escape closes the popover but not the modal. No seconds, as schedules are to the minute |
 | Schedule (evergreen) | Duration, with minutes or hours unit | `s-number-field` |
 | Targeting | All, Products or Collections; a picker button and a removable selected list | `s-choice-list`, `shopify.resourcePicker` |
 | Appearance | Background colour, Text colour, Size, Position | `s-color-field`, `s-select` |
@@ -113,3 +113,7 @@ Footer: **Cancel** and a dark primary **Create timer**, aligned right. The look 
 | One colour picker | Background and text | PRD §3 says "colors"; needed for contrast |
 | No type or targeting | Added | PRD §4.1, §4.2 |
 | Position: Top | Inline, Top bar, Bottom bar | Decision F2 |
+
+## Changelog
+
+- 2026-11-06: Start and end time gain a picker in a popover, with hour, minute and AM/PM columns and Cancel and OK, beside the typed HH:mm field, following a reference design from the user.

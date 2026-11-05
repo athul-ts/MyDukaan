@@ -3,6 +3,7 @@ import { useMutation } from "react-query";
 import { api, ApiError } from "../api";
 import { emptyForm, errorsFromDetails, formFromTimer, validateForm } from "../timerForm";
 import { Field } from "./Field";
+import { TimeField } from "./TimeField";
 import { TimerPreview } from "./TimerPreview";
 
 const twoColumns = { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 };
@@ -148,11 +149,11 @@ export const TimerModal = forwardRef(function TimerModal(
           <>
             <div style={twoColumns}>
               <Field tag="s-date-field" label="Start date" disabled={fixedBlocked} {...field("startDate")} />
-              <Field tag="s-text-field" label="Start time" placeholder="HH:mm" disabled={fixedBlocked} {...field("startTime")} />
+              <TimeField id="start-time" label="Start time" disabled={fixedBlocked} {...field("startTime")} />
             </div>
             <div style={twoColumns}>
               <Field tag="s-date-field" label="End date" disabled={fixedBlocked} {...field("endDate")} />
-              <Field tag="s-text-field" label="End time" placeholder="HH:mm" disabled={fixedBlocked} {...field("endTime")} />
+              <TimeField id="end-time" label="End time" disabled={fixedBlocked} {...field("endTime")} />
             </div>
             <s-text color="subdued">
               {timeZone ? `Times are in the store's timezone: ${timeZone}` : "Waiting for the store's timezone"}
