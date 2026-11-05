@@ -61,7 +61,8 @@ export function Widget({ config, store, counted }) {
     if (timer.type !== "evergreen") return toMs(timer.endAt);
     let state = session.evergreen.get(timer.id);
     if (!state) {
-      const end = store.start(timer.id, timer.durationMinutes, Date.now());
+      // Uses the time this render displays against, or the first tick reads one second too high.
+      const end = store.start(timer.id, timer.durationMinutes, now);
       state = { end, durationMinutes: timer.durationMinutes };
       session.evergreen.set(timer.id, state);
     }
@@ -145,7 +146,8 @@ export function Widget({ config, store, counted }) {
     <div ref={card} class={classes} style={{ "--cdt-bg": backgroundColor, "--cdt-fg": textColor }}>
       <div class="cdt-body">
         {ended ? (
-          <div class="cdt-clock cdt-ended">Offer ended</div>
+          // Keyed so it's a new element. Reusing a row would count as that row moving (a layout shift).
+          <div key="ended" class="cdt-clock cdt-ended">Offer ended</div>
         ) : (
           <>
             {timer.headline ? <div class="cdt-headline">{timer.headline}</div> : null}

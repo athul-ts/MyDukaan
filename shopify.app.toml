@@ -6,8 +6,9 @@ embedded = true
 name = "MyDukaan"
 
 [access_scopes]
-# S1, S2 and S4: shop timezone, metafield writes and the resource picker need no scopes.
-scopes = ""
+# Shopify requires write_app_proxy for any app with an app proxy (the CLI's dev preview rejects it
+# otherwise). S1, S2 and S4: shop timezone, metafield writes and the resource picker need none.
+scopes = "write_app_proxy"
 optional_scopes = [ ]
 use_legacy_install_flow = false
 

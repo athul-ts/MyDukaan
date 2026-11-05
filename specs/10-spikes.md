@@ -30,7 +30,7 @@ These are platform behaviours that documentation couldn't confirm. Each is time-
 | 1. Scaffold | **Works.** `shopify app init --template <template URL> --client-id <id>` with npm. The frontend arrives as plain files, not a submodule, so nothing needs vendoring. It also creates `.git`, `CLAUDE.md` and `AGENTS.md`, which must not replace this repo's |
 | 2. Adapter 8, Express 5, MongoDB sessions | **Works** after the code changes below, including a real embedded load and Admin API call |
 | 3. Mongoose and session adapter drivers | **No conflict.** Both resolve to one `mongodb@7.8.0` |
-| 4. Scopes | **None needed** for the shop timezone. S2 and S4 found the same for metafield writes and the resource picker. The install screen still lists "View staff and contributor data: Store owner", which the app didn't request. The cause isn't confirmed |
+| 4. Scopes | **None needed** for the shop timezone. (Later, in Slice D, the CLI began requiring `write_app_proxy` because the app has a proxy.) S2 and S4 found the same for metafield writes and the resource picker. The install screen still lists "View staff and contributor data: Store owner", which the app didn't request. The cause isn't confirmed |
 | 5. Reinstall | **A stale session does block the app.** The old token gets a 401 from Shopify. Deleting the session and returning 401 with `X-Shopify-Retry-Invalid-Session-Request: 1` **fixed it in about a second**, with no merchant action. App Bridge retried, token exchange created a new session, and `afterAuth` fired. **The hint metafield is erased by uninstalling,** and the installation gets a new ID |
 
 **Template code that must change for these versions:**

@@ -103,7 +103,7 @@ To be finalized in S1 and S2, in `shopify.app.toml`:
 
 ```toml
 [access_scopes]
-scopes = ""  # S1, S2 and S4: shop timezone, metafield writes and the resource picker need none
+scopes = "write_app_proxy"  # Required by Shopify for an app proxy. S1, S2 and S4: shop timezone, metafield writes and the resource picker need none
 
 [app_proxy]
 url = "<app url>/proxy"
@@ -126,3 +126,7 @@ Listed in `.env.example`, with values only in the gitignored `.env`:
 | Two MongoDB connections, from Mongoose and the session adapter | Accepted. They share one driver version (S1) |
 | `shopify app init` creates `.git`, `CLAUDE.md` and `AGENTS.md` | Scaffold to a temporary folder in slice A, and copy across without replacing this repo's versions |
 | Native dependency builds on Node 24 on Windows | Removing SQLite eliminates the main one |
+
+## Changelog
+
+- 2026-11-05: Added the `write_app_proxy` scope. The CLI began rejecting the dev preview without it during Slice D, though the proxy had worked with no scopes in S3.
