@@ -1,6 +1,6 @@
 # 06. Admin App
 
-**Status:** Approved (Gate 1, 2026-11-05) | **Implements:** FR-5, 6, 8, 9, 10, 18; NFR-17
+**Status:** v1.0 (Gate 2, 2026-11-05) | **Implements:** FR-5, 6, 8, 9, 10, 18; NFR-17
 
 React and Vite from the template, embedded with App Bridge. Screens use **Polaris web components** loaded by CDN (`polaris-2.js`, `app-bridge.js`). `@shopify/polaris` is removed, and the template's sample pages are deleted. S4 confirmed `s-*` elements work under React 18.
 

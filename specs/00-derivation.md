@@ -1,6 +1,6 @@
 # 00. Derivation from the PRD
 
-**Status:** Approved (Gate 1, 2026-11-05)
+**Status:** v1.0 (Gate 2, 2026-11-05)
 
 How each spec derives from the PRD. Three kinds of outcome:
 

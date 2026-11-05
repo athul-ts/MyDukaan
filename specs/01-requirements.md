@@ -1,6 +1,6 @@
 # 01. Requirements
 
-**Status:** Approved (Gate 1, 2026-11-05)
+**Status:** v1.0 (Gate 2, 2026-11-05)
 
 Priority: **M** = mandatory (PRD states it, never cut). **S** = should (cuttable per [PLAN](../PLAN.md#cut-order-if-time-runs-short)).
 

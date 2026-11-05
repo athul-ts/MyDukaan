@@ -1,6 +1,6 @@
 # 04. API
 
-**Status:** Approved (Gate 1, 2026-11-05) | **Implements:** FR-11, 13, 16; NFR-2, 3, 8, 10, 12, 13 | **Contract:** [openapi.yaml](openapi.yaml)
+**Status:** v1.0 (Gate 2, 2026-11-05) | **Implements:** FR-11, 13, 16; NFR-2, 3, 8, 10, 12, 13 | **Contract:** [openapi.yaml](openapi.yaml)
 
 ## Surfaces
 

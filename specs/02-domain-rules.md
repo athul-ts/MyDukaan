@@ -1,6 +1,6 @@
 # 02. Domain Rules
 
-**Status:** Approved (Gate 1, 2026-11-05) | **Implements:** FR-1, 2, 4, 7, 9, 14; NFR-9
+**Status:** v1.0 (Gate 2, 2026-11-05) | **Implements:** FR-1, 2, 4, 7, 9, 14; NFR-9
 
 All rules here are pure functions in `shared/`, with `now` passed as a parameter so they can be tested. Server, admin and widget share them.
 

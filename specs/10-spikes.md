@@ -1,6 +1,6 @@
 # 10. Verification Spikes
 
-**Status:** All four spikes have run, with results below. Marked closed when the user clears Gate 2.
+**Status:** Closed at Gate 2, 2026-11-05. Results below.
 
 These are platform behaviours that documentation couldn't confirm. Each is time-boxed with a fallback, so none can block delivery. Spike code is throwaway. Only the results here, and any spec amendments, are kept.
 

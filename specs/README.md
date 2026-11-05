@@ -1,23 +1,23 @@
 # Specifications
 
-**Version:** 0.2 (approved at Gate 1; becomes v1.0 at Gate 2) | **Date:** 2026-11-05 | **Source:** [PRD](PRD.md)
+**Version:** 1.0 (Gate 2 cleared 2026-11-05) | **Date:** 2026-11-05 | **Source:** [PRD](PRD.md)
 
 ## Index
 
 | Spec | Covers | Status |
 |---|---|---|
 | [PRD](PRD.md) | The assessment's original requirements. Wording is unchanged; its three images were removed, and two are now described in specs 05 and 06 | Source |
-| [00-derivation](00-derivation.md) | PRD line → requirement → spec, plus conflicts, gaps and who decided each | Approved |
-| [01-requirements](01-requirements.md) | FR, NFR and DEL requirements with acceptance criteria; out of scope | Approved |
-| [02-domain-rules](02-domain-rules.md) | Status, selection, evergreen state, validation | Approved |
-| [03-data-model](03-data-model.md) | Collections, indexes, tenant isolation | Approved |
-| [04-api](04-api.md) and [openapi.yaml](openapi.yaml) | Endpoints, auth, errors, caching, rate limits | Approved |
-| [05-widget](05-widget.md) | Zero-CLS flow, metafield hint, refresh, failure handling | Approved |
-| [06-admin](06-admin.md) | Dashboard, form, Polaris components, timezone | Approved |
-| [07-nfr-security](07-nfr-security.md) | Budgets and security rules, and how each is measured | Approved |
-| [08-dependencies](08-dependencies.md) | Versions, constraints, prerequisites | Approved |
-| [09-test-plan](09-test-plan.md) | Automated and manual checks mapped to requirements | Approved |
-| [10-spikes](10-spikes.md) | S1-S4: unverified platform behaviour and fallbacks | Open |
+| [00-derivation](00-derivation.md) | PRD line → requirement → spec, plus conflicts, gaps and who decided each | v1.0 |
+| [01-requirements](01-requirements.md) | FR, NFR and DEL requirements with acceptance criteria; out of scope | v1.0 |
+| [02-domain-rules](02-domain-rules.md) | Status, selection, evergreen state, validation | v1.0 |
+| [03-data-model](03-data-model.md) | Collections, indexes, tenant isolation | v1.0 |
+| [04-api](04-api.md) and [openapi.yaml](openapi.yaml) | Endpoints, auth, errors, caching, rate limits | v1.0 |
+| [05-widget](05-widget.md) | Zero-CLS flow, metafield hint, refresh, failure handling | v1.0 |
+| [06-admin](06-admin.md) | Dashboard, form, Polaris components, timezone | v1.0 |
+| [07-nfr-security](07-nfr-security.md) | Budgets and security rules, and how each is measured | v1.0 |
+| [08-dependencies](08-dependencies.md) | Versions, constraints, prerequisites | v1.0 |
+| [09-test-plan](09-test-plan.md) | Automated and manual checks mapped to requirements | v1.0 |
+| [10-spikes](10-spikes.md) | S1-S4: results and fallbacks | Closed |
 
 ## Reading order
 

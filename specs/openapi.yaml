@@ -1,10 +1,10 @@
 openapi: 3.0.3
 info:
   title: Countdown Timer API
-  version: 0.1.0
+  version: 1.0.0
   description: >-
     Contract for the admin and storefront APIs. Behaviour is specified in
-    04-api.md. Status: Approved (Gate 1, 2026-11-05).
+    04-api.md. Status: v1.0 (Gate 2, 2026-11-05).
 servers:
   - url: /
 tags:

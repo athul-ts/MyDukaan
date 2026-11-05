@@ -12,8 +12,8 @@ Spec-driven delivery of the Countdown Timer + Analytics Shopify app, with **24 h
 | **Gate 1: spec review** | Comments resolved, specs set to `Approved` | **User** | 0.5h | **Cleared 2026-11-05** |
 | 2. Prerequisites | Checklist below | **User** | 0.5h | In progress |
 | 3. Spikes S1-S4 | [specs/10-spikes.md](specs/10-spikes.md) filled in, specs amended | Claude + user logins | 2h | Done |
-| **Gate 2: dependencies cleared** | Versions pinned, spikes closed, specs marked v1.0 | **User** | 0.25h | Not started |
-| 4. Build slices A-E | Code, tests, commits per slice | Claude | 12h | Not started |
+| **Gate 2: dependencies cleared** | Versions pinned, spikes closed, specs marked v1.0 | **User** | 0.25h | **Cleared 2026-11-05** |
+| 4. Build slices A-E | Code, tests, commits per slice | Claude | 12h | In progress (Slice A) |
 | 5. Docs and Loom | README, API docs, 10-15 min recording | Claude drafts, **user** records | 2h | Not started |
 
 Total is about 19h, leaving a small buffer.

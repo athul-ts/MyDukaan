@@ -1,6 +1,6 @@
 # 03. Data Model
 
-**Status:** Approved (Gate 1, 2026-11-05) | **Implements:** FR-4, 10, 11, 16; NFR-5, 11
+**Status:** v1.0 (Gate 2, 2026-11-05) | **Implements:** FR-4, 10, 11, 16; NFR-5, 11
 
 Database: `countdown_timer` on local MongoDB 8.3. Tests use a separate `countdown_timer_test` database.
 
