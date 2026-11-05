@@ -18,7 +18,8 @@
     "lint": "eslint .",
     "test": "vitest run",
     "build:widget": "node scripts/build-widget.js",
-    "check:size": "npm run build:widget && node scripts/check-size.js"
+    "check:size": "npm run build:widget && node scripts/check-size.js",
+    "perf:proxy": "node scripts/perf-proxy.js"
   },
   "workspaces": [
     "extensions/*",

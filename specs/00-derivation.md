@@ -87,7 +87,7 @@ Also noted: §8 reads "48hrs days" with no start date. The user confirmed **24 h
 | G6 | What an impression is | At least 50% visible, once per page view | **Decided** (confirmed by the user before Slice D) |
 | G7 | Merchant edits an evergreen timer | Storage key carries the duration, so visitors restart only when the duration changes | **Decided** |
 | G8 | Hint goes stale when a timer expires, since nothing runs on a schedule | Hint stores start and end per entry, and Liquid compares them with `now` | **Decided** |
-| G9 | Whether the timer applies a discount | Display only. Stated as a README assumption | Proposed |
+| G9 | Whether the timer applies a discount | Display only. Stated as a README assumption | **Decided** (user, 2026-11-06) |
 | G10 | A wrong client clock breaks "all users see the same countdown" | Accepted: correction is unreliable under caching. Discussed in Loom | **Decided** (confirmed by the user before Slice D) |
 | G11 | Timer lapses while Shopify's cached page still has old Liquid | Accepted: a mismatch until the page cache refreshes, with the duration measured in S2. Widget still validates against API data | **Decided** (confirmed by the user before Slice D) |
 | G12 | What urgency looks like, as the mockup only names "Color pulse" | No new colour field. The background fades between 100% and 70% opacity. Reduced motion swaps background and text colours | **Decided** (confirmed by the user before Slice D) |

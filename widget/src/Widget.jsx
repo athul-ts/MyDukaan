@@ -1,4 +1,4 @@
-import { Component } from "preact";
+import { Component, render } from "preact";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "preact/hooks";
 import { formatCountdown, isUrgent, nextTickDelay } from "../../shared/countdown.js";
 import { allCandidatesOver, isBar, nextWaitDelay, resolveDisplay, resolvePlacement } from "../../shared/display.js";
@@ -137,7 +137,7 @@ export function Widget({ config, store, counted }) {
 
   // A theme ancestor can trap a bar's z-index, so a bar lives on body. See specs/05-widget.md.
   useLayoutEffect(() => {
-    if (!showsBar || window.Shopify?.designMode) return undefined;
+    if (!showsBar) return undefined;
     const { root } = config;
     const spacer = document.createElement("div");
     spacer.style.height = root.style.height;
@@ -145,7 +145,15 @@ export function Widget({ config, store, counted }) {
     document.body.append(root);
     root.classList.remove("cdt-root");
     root.style.display = "contents";
+    // The theme editor replaces a section's HTML and mounts its new root, so the moved one must go.
+    const onSectionUnload = (event) => {
+      if (!event.target.contains?.(spacer)) return;
+      render(null, root);
+      root.remove();
+    };
+    document.addEventListener("shopify:section:unload", onSectionUnload);
     return () => {
+      document.removeEventListener("shopify:section:unload", onSectionUnload);
       root.style.display = "";
       root.classList.add("cdt-root");
       spacer.replaceWith(root);
