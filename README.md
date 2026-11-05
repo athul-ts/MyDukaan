@@ -145,7 +145,7 @@ On a product with no timer, Lighthouse measured CLS 0.008. The widget doesn't lo
 | `GET /proxy/timers` | 3000 per minute per shop |
 | `POST /proxy/impressions` | 3000 per minute per shop |
 
-Limits are per shop, not per visitor, because Shopify doesn't document whether the visitor IP forwarded through the app proxy can be trusted. Storefront limits are generous, since all of a shop's visitors share one key and a wrongly limited request only hides a timer. Over the limit, the API returns 429 with `Retry-After`, and the widget renders nothing and doesn't retry. Running several server instances would need a shared store such as Redis.
+Limits are per shop, not per visitor, because Shopify doesn't document whether the visitor IP forwarded through the app proxy can be trusted. Storefront limits are generous, since all of a shop's visitors share one key and a wrongly limited request only hides a timer. Over the limit, the API returns 429 with `Retry-After`, and the widget renders nothing and doesn't retry.
 
 ## API
 
@@ -199,7 +199,7 @@ Full details: [specs/04-api.md](specs/04-api.md). Machine-readable contract: [sp
 - Daily impression history and unique visitors, rather than one total.
 - Optionally creating a matching Shopify discount for a timer.
 - Correcting the visitor's clock with a server time offset.
-- A Redis store for rate limits, and hosting with CI.
+- Hosting with CI.
 - Compliance webhooks, for an App Store listing.
 
 ## Project documents

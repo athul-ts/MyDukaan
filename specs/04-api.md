@@ -112,7 +112,7 @@ S3 confirmed these headers reach the browser, and that a repeat request is serve
 | `GET /proxy/timers` | 3000 per minute | Shop |
 | `POST /proxy/impressions` | 3000 per minute | Shop |
 
-S3 showed the visitor's IP inside `X-Forwarded-For`, but no Shopify documentation says it can be trusted, so limits aren't per visitor. Storefront limits are generous per shop because all of a shop's visitors share that key, and a false limit only hides a timer. On 429 the widget renders nothing and doesn't retry. Moving to a shared Redis store for multiple instances is documented in the README.
+S3 showed the visitor's IP inside `X-Forwarded-For`, but no Shopify documentation says it can be trusted, so limits aren't per visitor. Storefront limits are generous per shop because all of a shop's visitors share that key, and a false limit only hides a timer. On 429 the widget renders nothing and doesn't retry.
 
 ## Webhooks
 
