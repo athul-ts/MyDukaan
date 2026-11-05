@@ -20,12 +20,12 @@
 | Polaris web components | `polaris-2.js` (CDN stable channel) | Ran S4 |
 | `preact` | 11.1.1 | Runs in the widget (slice D) |
 | `esbuild` | 0.28.2 | Builds the widget (slice D) |
-| `zod` | 4.6.7 | **Not installed yet** |
+| `zod` | 4.6.7 | Server and admin validation (slice B) |
 | `helmet` | 8.3.0 | Ran in the admin in slice A |
-| `express-rate-limit` | 8.7.3 | **Not installed yet** |
-| `date-fns`, `date-fns-tz` | 4.4.0, 3.2.0 | **Not installed yet.** `date-fns-tz` accepts `date-fns` 3 or 4 |
-| `vitest` | 5.1.0 | **Not installed yet** |
-| `supertest` | 7.3.1 | **Not installed yet** |
+| `express-rate-limit` | 8.7.3 | Rate limits (slice B) |
+| `date-fns`, `date-fns-tz` | 4.4.0, 3.2.0 | Admin timezone handling (slice C). `date-fns-tz` accepts `date-fns` 3 or 4 |
+| `vitest` | 5.1.0 | Tests (slice B) |
+| `supertest` | 7.3.1 | Integration tests (slice B) |
 | `eslint`, `@eslint/js`, `globals` | 10.14.0, see `package.json`, see `package.json` | Slice A |
 
 ## Environment
@@ -64,7 +64,7 @@
 | `react-router-dom` | Removed | The admin has one route, as create and edit use a modal |
 | `react-query` | Template ^3.34.19 | Leave on the template's version |
 | `vite`, `@vitejs/plugin-react` | 8.3.6, 6.2.1 (the template had ^5.4.0 and 4.2.1) | Upgraded so there is one Vite. `vitest` needs 6.4 or newer, and npm hoists one copy to the root, so two versions left the admin page blank in slice C |
-| `date-fns`, `date-fns-tz` | To confirm at Gate 2 | Shop timezone conversion |
+| `date-fns`, `date-fns-tz` | 4.4.0, 3.2.0 | Shop timezone conversion |
 | **Removed** | `@shopify/polaris`, `i18next` and `formatjs` packages, `stylelint` | Deprecated (F1), or unused as translated text is out of scope |
 
 The admin's other template packages stay on the template's versions, because upgrading them adds risk without helping any requirement in a time-boxed build.
@@ -130,3 +130,4 @@ Listed in `.env.example`, with values only in the gitignored `.env`:
 ## Changelog
 
 - 2026-11-05: Added the `write_app_proxy` scope. The CLI began rejecting the dev preview without it during Slice D, though the proxy had worked with no scopes in S3.
+- 2026-11-06: Pinned table updated: packages marked "not installed yet" were installed in slices B and C.

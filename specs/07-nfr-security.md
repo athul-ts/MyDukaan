@@ -17,7 +17,7 @@ The 200ms target applies to the app's processing time. The dev tunnel and Shopif
 
 - Non-matching products load no script and make no API call.
 - Browser caching with `stale-while-revalidate`.
-- Lean, indexed, per-shop queries with field projection.
+- Lean, indexed, per-shop queries.
 - Counters kept in a separate collection from config.
 - No interval polling.
 - Minimal bundle: Preact and only needed shared functions.
