@@ -186,6 +186,7 @@ Full details: [specs/04-api.md](specs/04-api.md). Machine-readable contract: [sp
 - **Edit delay:** an edit reaches visitors within about 30 seconds, or 150 seconds in the worst case through the browser cache. Shopify's page cache took about 6 seconds to reflect a hint change on the dev store.
 - **Collections:** only Online Store collections match, as Liquid reports only those. Only a product's first 50 collections are checked.
 - **Evergreen urgency:** after an evergreen countdown ends, it restarts on the visitor's next page load. This follows the PRD, but a visitor can see it restart.
+- **Reinstalling:** uninstalling removes the block from the theme, as Shopify does for all app blocks, so it has to be added again. Timers and impressions are kept, and the app rebuilds its storefront data on reinstall.
 - **Deleting loses impressions:** deleting a timer also deletes its impression count.
 - **Impression totals:** impressions are a running total per page view, not unique visitors, and include any bot that runs JavaScript.
 - **Hint size:** a hint over 120KB is replaced by an overflow marker. Pages then fetch on every product, which can cause a small layout shift.

@@ -67,6 +67,52 @@ Recorded with pass or fail before submission.
 | M-26 | Check the Liquid decision for: lead-in, live, expired, evergreen; all, product, collection; product ID 123 against a target of 1234; hint missing; hint overflow | Each reserves space, loads the script or outputs nothing, per [05-widget](05-widget.md#zero-cls-flow) | FR-4, NFR-6 |
 | M-27 | Set a timer to Top bar, then Bottom bar, and view a targeted product on the dev store | The whole countdown is visible, with the header and page content painted beneath it, and no layout movement | FR-6, NFR-6 |
 
+## Results
+
+Recorded 2026-11-06. "Store" is the dev store `mydukaan-bc2ubatx` on the Horizon theme, checked by the user. "Local" is the scratchpad harness: the real block Liquid, CSS and widget bundle in headless Chrome, with the API stubbed. A local pass doesn't replace a store check, so those rows stay **Partial** or **Not run**.
+
+### Automated
+
+| ID | Result | Evidence |
+|---|---|---|
+| T-1 to T-15 | Pass | `npm test`: 184 tests in 9 files |
+| A-1 | Pass | `npm run lint`: no errors |
+| A-2 | Pass | 9.56KB JS + CSS gzipped (JS 8.92KB) |
+| A-3 | Pass | p95 11.6ms server-side, 2000 requests, 10 concurrent, 200 timers |
+| A-4 | Pass | 184 tests: 125 unit tests in `tests/unit` and 59 integration tests |
+
+### Manual
+
+| ID | Result | Evidence |
+|---|---|---|
+| M-1 | Partial | Store: `Test Fixed` went scheduled → active on its own and appeared. Its expiry wasn't watched. Local: start and "Offer ended" pass |
+| M-2 | Pass | Store: reload continued the countdown |
+| M-3 | Pass | Store: after setting `lastSeenAt` to 31 minutes ago, a reload restarted the evergreen countdown from 00:32:09 to 00:44:55. Also covered by T-3 |
+| M-4 | Partial | Store: product and collection (`Timer Test`) targeting, with non-target products clean. All-products scope and edit preloading weren't checked separately |
+| M-5 | Pass | Store: colour, position (top bar, bottom bar, inline) and size changes reached the storefront |
+| M-6 | Not run | Local: pulse runs, and reduced motion swaps colours |
+| M-7 | Partial | Store: fixed beat evergreen on a product both target. Product beating collection or all is covered by T-2 and local only |
+| M-8 | Pass | Store: "Offer ended" in the same box with no visible movement |
+| M-9 | Pass | Store: saving `<img src=x onerror=alert(1)>` as a description produced no popup in the admin or on the storefront. Stripping is covered by T-4 |
+| M-10 | Pass | Store: with the `timers` request blocked in DevTools, the page worked. Local: blocked, 500 and slow responses leave the box empty, its height kept, CLS 0, no uncaught errors, no request loop |
+| M-11 | Partial | S3 confirmed `Cache-Control` and browser-cache reuse through the proxy. The 5-minute watch wasn't done |
+| M-12 | Pass | Store: no script and no API call on a non-target product; `cdt-` not found in the page |
+| M-13 | Pass | Store: impressions rose (Evergreen 8 → 15, Test Fixed 0 → 2). Once per page view and only when visible: local |
+| M-14 | Pass | Store, mobile: CLS 0 on Clay Plant Pot and Copper Light (first Clay Plant Pot run 0.003, not repeated). White Ceramic Pot, no timer: 0.008 from the theme, as the widget doesn't load there |
+| M-15 | Partial | Store timezone New York, browser India. `Test Fixed`, set for 9:00 AM New York, became active and counted down to its end, but the exact start moment wasn't watched |
+| M-16 | Pass | Store: a deleted timer stopped showing on its product after a reload. Stats removal is covered by the delete integration test |
+| M-17 | Pass | Store: after uninstalling, `npm run dev` reinstalled the app; timers were intact and the timer showed again. Uninstalling removed the block from the theme, so it had to be added again, which is Shopify's behaviour for app blocks |
+| M-18 | Pass | Store: block added under Apps and shows where placed |
+| M-19 | Pass | Store: search, status filter (after the "Invalid query" fix) and sort; "Competes with 1 other timer" shown |
+| M-20 | Pass | Store: the link opened the theme editor to add the block |
+| M-21 | Pass | `git grep`: no `ScriptTag` or `@shopify/polaris`; backend is JavaScript; stack matches 08-dependencies |
+| M-22 | Not run | Local: invalid JSON and wrong-shape responses leave the page working |
+| M-23 | Pass | Store: field errors shown, as reported by the user. Tests: the client rule ("Must be after start", "Must be in the future"), the server's 422, and a server error mapped back onto the form field (`timer-form.test.js`) |
+| M-24 | Pass | No token prefixes (`shpss_`, `shpat_`, `shpca_`, `shppa_`), secret variable names or MongoDB URLs in tracked files, the widget bundle or a fresh admin build. `.env` isn't tracked. The secret's value itself wasn't searched for, as it isn't read |
+| M-25 | Not run | Local: digits and box width steady |
+| M-26 | Pass | Local Liquid harness: 23 cases |
+| M-27 | Pass | Store: both bars above the header and page content, live and in the theme editor |
+
 ## Traceability check
 
 Before submission, every `FR`, `NFR` and `DEL` row in [01-requirements](01-requirements.md) must show one of: passing test, recorded manual check, or a deliberate cut listed in the README. Run `/spec-trace` to report any that don't.
