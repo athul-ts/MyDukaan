@@ -1,12 +1,15 @@
 import { describe, expect, it } from "vitest";
 import {
+  earliestEndDate,
   emptyForm,
+  errorsAfterChange,
   errorsFromDetails,
   formatSchedule,
   formatTargeting,
   formFromTimer,
   formToPayload,
   fromClock,
+  scheduleComplete,
   toClock,
   validateForm,
 } from "../../web/frontend/timerForm.js";
@@ -103,7 +106,8 @@ describe("validateForm", () => {
 
   it("requires a future end on create", () => {
     const form = fixedForm({ startDate: "2029-01-01", endDate: "2029-01-02" });
-    expect(validate(form).errors.endDate).toBe("Must be in the future");
+    // NOW is midnight on Jan 1 in UTC, which is still Dec 31 in New York.
+    expect(validate(form).errors.endDate).toBe("Must be in the future. It's 7:00 PM on Dec 31 in the store's timezone.");
   });
 
   it("lets an expired timer be edited as long as its dates don't change", () => {
@@ -111,7 +115,7 @@ describe("validateForm", () => {
     const { startAt, endAt } = formToPayload(form, NEW_YORK);
     const existing = { type: "fixed", startAt, endAt };
     expect(validate(form, { existing }).valid).toBe(true);
-    expect(validate({ ...form, endTime: "18:00" }, { existing }).errors.endDate).toBe("Must be in the future");
+    expect(validate({ ...form, endTime: "18:00" }, { existing }).errors.endDate).toBe("Must be in the future. It's 7:00 PM on Dec 31 in the store's timezone.");
   });
 
   it("requires a whole number for duration and threshold", () => {
@@ -226,5 +230,82 @@ describe("time picker conversion", () => {
       const value = `${String(Math.floor(minutes / 60)).padStart(2, "0")}:${String(minutes % 60).padStart(2, "0")}`;
       expect(fromClock(toClock(value))).toBe(value);
     }
+  });
+});
+
+describe("schedule order is checked as soon as it can be", () => {
+  const options = (overrides = {}) => ({ touched: {}, submitted: false, timeZone: NEW_YORK, existing: null, now: NOW, ...overrides });
+
+  it("knows when both dates and both times are filled in", () => {
+    expect(scheduleComplete(fixedForm())).toBe(true);
+    expect(scheduleComplete(fixedForm({ endTime: "" }))).toBe(false);
+    expect(scheduleComplete(fixedForm({ startDate: "" }))).toBe(false);
+  });
+
+  it("flags an end before the start at once, before any field is left", () => {
+    const next = fixedForm({ endDate: "2030-11-28" });
+    expect(errorsAfterChange({}, "endDate", next, options()).endDate).toBe("Must be after start");
+  });
+
+  it("flags an end equal to the start, on the same day", () => {
+    const next = fixedForm({ endDate: "2030-11-29", endTime: "09:00" });
+    expect(errorsAfterChange({}, "endTime", next, options()).endDate).toBe("Must be after start");
+  });
+
+  it("flags it when the start is moved past the end", () => {
+    const next = fixedForm({ startDate: "2030-12-01" });
+    expect(errorsAfterChange({}, "startDate", next, options()).endDate).toBe("Must be after start");
+  });
+
+  it("clears the error once either side is fixed", () => {
+    const previous = { endDate: "Must be after start" };
+    expect(errorsAfterChange(previous, "endTime", fixedForm(), options()).endDate).toBeUndefined();
+    expect(errorsAfterChange(previous, "startTime", fixedForm(), options()).endDate).toBeUndefined();
+  });
+
+  it("waits while the schedule is incomplete", () => {
+    const next = fixedForm({ endDate: "2030-11-28", endTime: "" });
+    expect(errorsAfterChange({}, "endDate", next, options()).endDate).toBeUndefined();
+  });
+
+  it("leaves other untouched fields alone", () => {
+    const next = fixedForm({ name: "", endDate: "2030-11-28" });
+    const errors = errorsAfterChange({}, "endDate", next, options());
+    expect(errors.name).toBeUndefined();
+  });
+
+  it("re-checks everything after a save attempt", () => {
+    const next = fixedForm({ name: "", endDate: "2030-11-28" });
+    const errors = errorsAfterChange({}, "endDate", next, options({ submitted: true }));
+    expect(errors.name).toBeDefined();
+    expect(errors.endDate).toBe("Must be after start");
+  });
+
+  it("ignores the schedule for evergreen timers", () => {
+    const next = { ...evergreenForm(), startDate: "2030-11-29", startTime: "09:00", endDate: "2030-11-28", endTime: "09:00" };
+    expect(errorsAfterChange({}, "endDate", next, options()).endDate).toBeUndefined();
+  });
+});
+
+describe("earliest end date in the calendar", () => {
+  it("is today in the store's timezone when the start is earlier", () => {
+    // NOW is midnight on Jan 1 in UTC, which is still Dec 31 in New York.
+    expect(earliestEndDate(fixedForm({ startDate: "2029-12-01" }), NEW_YORK, NOW)).toBe("2029-12-31");
+  });
+
+  it("is the start date when the start is later than today", () => {
+    expect(earliestEndDate(fixedForm({ startDate: "2030-11-29" }), NEW_YORK, NOW)).toBe("2030-11-29");
+  });
+
+  it("is today when no start date is chosen yet", () => {
+    expect(earliestEndDate(fixedForm({ startDate: "" }), NEW_YORK, NOW)).toBe("2029-12-31");
+  });
+
+  it("follows the store's day, not the browser's", () => {
+    expect(earliestEndDate(fixedForm({ startDate: "" }), "Asia/Kolkata", NOW)).toBe("2030-01-01");
+  });
+
+  it("leaves every day open when neither is known", () => {
+    expect(earliestEndDate(fixedForm({ startDate: "" }), null, NOW)).toBeUndefined();
   });
 });

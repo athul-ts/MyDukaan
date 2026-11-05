@@ -65,7 +65,9 @@ if (selected) { /* store id and title; undefined means cancelled, so keep the cu
 
 ### Validation UX
 
-The shared zod schema runs on submit and on field blur. Errors appear inline, and a summary banner appears on submit. Server `422` details map onto fields by `path`, so server-only failures show the same way. Save is disabled while in flight, and a failed save keeps form contents.
+The shared zod schema runs on submit and on field blur. Errors appear inline, and a summary banner appears on submit.
+
+The schedule is checked as soon as it can be. The end date's calendar only offers dates from the start date or today in the shop's timezone, whichever is later (`allow` on `s-date-field`). An end in the past says what time it is for the shop, such as "Must be in the future. It's 5:24 PM on Nov 5 in the store's timezone", because the merchant's own clock may be on a different day. Once both dates and both times are filled in, any change to one of them re-checks the end straight away, so an end at or before the start shows "Must be after start" without waiting for blur or submit, and fixing either side clears it. Server `422` details map onto fields by `path`, so server-only failures show the same way. Save is disabled while in flight, and a failed save keeps form contents.
 
 ### Timezone
 
@@ -117,3 +119,5 @@ Footer: **Cancel** and a dark primary **Create timer**, aligned right. The look 
 ## Changelog
 
 - 2026-11-06: Start and end time gain a picker in a popover, with hour, minute and AM/PM columns and Cancel and OK, beside the typed HH:mm field, following a reference design from the user.
+- 2026-11-06: The end date calendar starts at the start date, and an end at or before the start is flagged as soon as the schedule is complete, at the user's request.
+- 2026-11-06: The end date calendar also starts no earlier than today in the shop's timezone, and "Must be in the future" names the shop's current time, after the user hit it while in a different timezone from the shop.

@@ -1,7 +1,14 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { useMutation } from "react-query";
 import { api, ApiError } from "../api";
-import { emptyForm, errorsFromDetails, formFromTimer, validateForm } from "../timerForm";
+import {
+  earliestEndDate,
+  emptyForm,
+  errorsAfterChange,
+  errorsFromDetails,
+  formFromTimer,
+  validateForm,
+} from "../timerForm";
 import { Field } from "./Field";
 import { TimeField } from "./TimeField";
 import { TimerPreview } from "./TimerPreview";
@@ -63,11 +70,9 @@ export const TimerModal = forwardRef(function TimerModal(
     dirty.current = true;
     setForm((current) => {
       const next = { ...current, [field]: value };
-      if (submitted) setErrors(validate(next).errors);
-      else if (touched[field]) {
-        const fieldErrors = validate(next).errors;
-        setErrors((previous) => ({ ...previous, [field]: fieldErrors[field] }));
-      }
+      setErrors((previous) =>
+        errorsAfterChange(previous, field, next, { touched, submitted, timeZone, existing: editing }),
+      );
       return next;
     });
   };
@@ -106,6 +111,7 @@ export const TimerModal = forwardRef(function TimerModal(
 
   const isFixed = form.type === "fixed";
   const fixedBlocked = isFixed && !timeZone;
+  const endFrom = earliestEndDate(form, timeZone);
   const list = form.scope === "products" ? "products" : "collections";
   const scopeWord = form.scope === "products" ? "product" : "collection";
   const errorCount = Object.values(errors).filter(Boolean).length;
@@ -152,7 +158,13 @@ export const TimerModal = forwardRef(function TimerModal(
               <TimeField id="start-time" label="Start time" disabled={fixedBlocked} {...field("startTime")} />
             </div>
             <div style={twoColumns}>
-              <Field tag="s-date-field" label="End date" disabled={fixedBlocked} {...field("endDate")} />
+              <Field
+                tag="s-date-field"
+                label="End date"
+                allow={endFrom ? `${endFrom}--` : undefined}
+                disabled={fixedBlocked}
+                {...field("endDate")}
+              />
               <TimeField id="end-time" label="End time" disabled={fixedBlocked} {...field("endTime")} />
             </div>
             <s-text color="subdued">

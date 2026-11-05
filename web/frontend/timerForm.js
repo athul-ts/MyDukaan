@@ -177,7 +177,9 @@ export function validateForm(form, timeZone, { existing = null, now = Date.now()
       if (!TIME_PATTERN.test(form[timeKey])) errors[timeKey] = "Enter a time as HH:mm, like 09:30";
     }
     if (result.success && endMustBeInFuture(payload, existing) && new Date(payload.endAt).getTime() <= now) {
-      errors.endDate = "Must be in the future";
+      // The merchant's own clock may be on another day, so say what time it is for the store.
+      const storeNow = formatInTimeZone(now, timeZone, "h:mm a 'on' MMM d");
+      errors.endDate = `Must be in the future. It's ${storeNow} in the store's timezone.`;
     }
     if (
       payload.startAt &&
@@ -192,6 +194,44 @@ export function validateForm(form, timeZone, { existing = null, now = Date.now()
   if (toInteger(form.threshold) === undefined) errors.threshold = "Enter a whole number of minutes";
 
   return { payload, errors, valid: Object.keys(errors).length === 0 };
+}
+
+/**
+ * The first day the end date's calendar offers: the start date or today in the store's timezone,
+ * whichever is later. Undefined when neither is known, which leaves every day open.
+ */
+export function earliestEndDate(form, timeZone, now = Date.now()) {
+  const today = timeZone ? formatInTimeZone(now, timeZone, "yyyy-MM-dd") : "";
+  const start = DATE_PATTERN.test(form.startDate) ? form.startDate : "";
+  return (start > today ? start : today) || undefined;
+}
+
+const SCHEDULE_FIELDS = new Set(["startDate", "startTime", "endDate", "endTime"]);
+
+/** Both dates and both times are filled in validly, so the schedule's order can be checked. */
+export function scheduleComplete(form) {
+  return (
+    DATE_PATTERN.test(form.startDate) &&
+    TIME_PATTERN.test(form.startTime) &&
+    DATE_PATTERN.test(form.endDate) &&
+    TIME_PATTERN.test(form.endTime)
+  );
+}
+
+/**
+ * The errors to show after one field changes. After a save attempt, everything is re-checked.
+ * Before that, a field shows its own error once it has been left, and a complete schedule is
+ * checked straight away, so an end before the start shows at once and clears once fixed.
+ */
+export function errorsAfterChange(previous, field, next, { touched, submitted, timeZone, existing, now }) {
+  const found = validateForm(next, timeZone, { existing, now }).errors;
+  if (submitted) return found;
+  const updated = { ...previous };
+  if (touched[field]) updated[field] = found[field];
+  if (next.type === "fixed" && SCHEDULE_FIELDS.has(field) && scheduleComplete(next)) {
+    updated.endDate = found.endDate;
+  }
+  return updated;
 }
 
 export function formatSchedule(timer, timeZone) {
