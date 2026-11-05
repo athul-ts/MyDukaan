@@ -91,6 +91,7 @@ Also noted: §8 reads "48hrs days" with no start date. The user confirmed **24 h
 | G10 | A wrong client clock breaks "all users see the same countdown" | Accepted: correction is unreliable under caching. Discussed in Loom | Proposed |
 | G11 | Timer lapses while Shopify's cached page still has old Liquid | Accepted: a mismatch until the page cache refreshes, with the duration measured in S2. Widget still validates against API data | Proposed |
 | G12 | What urgency looks like, as the mockup only names "Color pulse" | No new colour field. The background fades between 100% and 70% opacity. Reduced motion swaps background and text colours | Proposed |
+| G14 | Which login mode to use with the upgraded library | Token exchange: it fits the managed install, returns a retry header, and recovers from a stale session by itself (S1). Its `/api/auth` routes go unused, a move away from the template, noted in the README | **Decided** (user asked for the recommendation to be applied) |
 | G13 | Headline, description and countdown don't fit the smallest box | `small` shows headline and countdown on one row, with no description | Proposed |
 
 ## Other user decisions

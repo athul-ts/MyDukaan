@@ -18,7 +18,7 @@ Project commands: `/spec-review`, `/spec-trace`, `/gate-check`.
 
 | Layer | Choice |
 |---|---|
-| Backend | Node 24 LTS, JavaScript (ESM), Express, Mongoose, zod, from Shopify's node-express template |
+| Backend | Node 24 LTS, JavaScript (ESM), Express, Mongoose, zod, from Shopify's node-express template. Auth uses token exchange with the managed install |
 | Database | Local MongoDB Community 8.3 at `mongodb://127.0.0.1:27017`. No Docker |
 | Admin | React + Vite from the template, **Polaris web components** via CDN, App Bridge. Never add `@shopify/polaris`: it is deprecated |
 | Storefront | Theme App Extension app block + Preact widget. Never use ScriptTag |

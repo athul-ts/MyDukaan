@@ -56,6 +56,8 @@ An app-owned JSON metafield, namespace `countdown`, key `timer_hint`, on the app
 
 **Built by** `buildHint(timers, now)` in `shared/`: excludes expired timers, and sorts entries in [selection order](02-domain-rules.md#selection) so the first Liquid match is the likely winner. It contains no merchant text.
 
+**Reinstalling:** uninstalling erases this metafield, so `afterAuth` rebuilds it ([data lifecycle](03-data-model.md#data-lifecycle)).
+
 **Size cap:** Shopify rejects a JSON metafield above 131,072 bytes. If the serialized hint exceeds 120KB, the app writes `{"v": 1, "overflow": true}` instead, and Liquid treats that as a missing hint. In S2, a 127KB hint with 34 entries added no measurable render time.
 
 **Written on** every timer create, update and delete, and after authentication, using `metafieldsSet`. It's rebuilt from MongoDB each time, with writes queued per shop.

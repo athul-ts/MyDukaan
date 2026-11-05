@@ -6,7 +6,7 @@
 
 | Surface | Base | Authentication |
 |---|---|---|
-| Admin | `/api` | App Bridge session token, `shopify.validateAuthenticatedSession()` |
+| Admin | `/api` | App Bridge session token, `shopify.validateAuthenticatedSession()` with token exchange (decision G14). A check in front of it returns 401 when the token is missing |
 | Storefront | `/proxy`, reached by browsers at `/apps/countdown` on the shop's domain | App proxy HMAC signature |
 
 ### Why an app proxy

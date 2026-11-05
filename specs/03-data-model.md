@@ -94,4 +94,4 @@ A derived copy of targeting and schedule, written to Shopify so Liquid can read 
 |---|---|
 | Timer deleted | Delete its `timer_stats`, rebuild hint |
 | App uninstalled | No action, as webhooks are out of scope. Data stays in the local database |
-| App reinstalled | The hint is rebuilt from MongoDB after authentication, as uninstalling probably removes app-owned metafields. **[S1]** tests how a stale session behaves |
+| App reinstalled | S1 confirmed that uninstalling erases the hint and leaves a stale session. On a 401 from the Admin API, the app deletes the session and returns 401 with the retry header. App Bridge retries, token exchange creates a new session, and `afterAuth` rebuilds the hint from MongoDB |

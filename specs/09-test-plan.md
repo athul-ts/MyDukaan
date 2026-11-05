@@ -21,6 +21,7 @@ Run with `npm test`. Unit tests inject `now`. Integration tests use the `countdo
 | T-11 | `isUrgent`, countdown formatter | Threshold boundary; `none` mode; days omitted when zero | FR-7, NFR-18 |
 | T-12 | Hint sync failure and recovery | Timer still saves and `hintSync` is `failed`; the list still reports it on a later read; `POST /api/hint/sync` clears it; the rebuilt hint reflects the current timers | FR-16 |
 | T-13 | `shouldRefetch` | Tab return under and over 5 minutes; all ended waits 150 seconds; only one refetch per list, so no loop | FR-13 |
+| T-15 | Stale session (integration) | A 401 from the Admin API deletes the session and returns 401 with the retry header; the next request creates a new session; `afterAuth` rebuilds the hint | FR-16 |
 | T-14 | Impressions (integration) | First count creates the stats document and later ones increment it; returns 202; accepts `text/plain` and JSON; unknown or malformed ID returns 404; malformed JSON returns 400 | FR-11 |
 
 ## Other automated checks

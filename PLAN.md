@@ -11,7 +11,7 @@ Spec-driven delivery of the Countdown Timer + Analytics Shopify app, with **24 h
 | 1. Write spec pack | `specs/`, `PLAN.md`, `CLAUDE.md`, `.claude/` | Claude | 1.5h | Done |
 | **Gate 1: spec review** | Comments resolved, specs set to `Approved` | **User** | 0.5h | **Cleared 2026-11-05** |
 | 2. Prerequisites | Checklist below | **User** | 0.5h | In progress |
-| 3. Spikes S1-S4 | [specs/10-spikes.md](specs/10-spikes.md) filled in, specs amended | Claude + user logins | 2h | In progress (S1) |
+| 3. Spikes S1-S4 | [specs/10-spikes.md](specs/10-spikes.md) filled in, specs amended | Claude + user logins | 2h | Done |
 | **Gate 2: dependencies cleared** | Versions pinned, spikes closed, specs marked v1.0 | **User** | 0.25h | Not started |
 | 4. Build slices A-E | Code, tests, commits per slice | Claude | 12h | Not started |
 | 5. Docs and Loom | README, API docs, 10-15 min recording | Claude drafts, **user** records | 2h | Not started |
@@ -37,8 +37,8 @@ Total is about 19h, leaving a small buffer.
 - [x] MongoDB running (8.3.1 confirmed on port 27017)
 - [x] Install Node 24 LTS (24.22.2 through nvm-windows; Laragon's Node removed from the user PATH)
 - [x] Install Shopify CLI (5.0.1)
-- [ ] Development store created (`mydukaan-bc2ubatx.myshopify.com`); product import to be confirmed
-- [ ] App registration (the CLI can create this during S1)
+- [x] Development store (`mydukaan-bc2ubatx.myshopify.com`), with sample products and a `Timer Test` collection
+- [x] App registration (`MyDukaan`, linked through the CLI)
 - [x] GitHub repo for submission
 - [ ] Loom account
 
@@ -46,7 +46,7 @@ Total is about 19h, leaving a small buffer.
 
 | Slice | Scope | Requirements | Done when | Status |
 |---|---|---|---|---|
-| A. Foundation | Scaffold, vendor the frontend submodule into the repo, ESLint, Mongo, env template | NFR-14, 16, 17 | App loads in the dev store admin | Not started |
+| A. Foundation | Scaffold with `shopify app init` into a temporary folder and copy across, keeping this repo's `.git` and `CLAUDE.md`; apply the code changes from [S1](specs/10-spikes.md#s1-scaffold-and-backend-versions-45-min); ESLint, Mongo, env template | NFR-14, 16, 17 | App loads in the dev store admin | Not started |
 | B. Domain + API | `shared/` rules, repositories, validators, admin routes, proxy HMAC, rate limits, hint sync | FR-1, 2, 4, 11, 14, 16; NFR-2, 3, 8-13, 15 | Unit and integration tests pass | Not started |
 | C. Admin | Dashboard, form, resource picker, timezone handling, error states | FR-4-10, 18 | Full timer lifecycle works in the admin | Not started |
 | D. Widget | Theme extension, Liquid hint logic, Preact bundle, size check, beacon | FR-2, 7, 11-15; NFR-1, 4, 6, 7, 18 | Timer renders on the storefront with CLS 0 | Not started |
