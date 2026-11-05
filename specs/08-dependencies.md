@@ -63,7 +63,7 @@
 | `react`, `react-dom` | Template ^18.2.0 (latest 19.3.1) | Stay on 18. S4 showed no need for 19 |
 | `react-router-dom` | Removed | The admin has one route, as create and edit use a modal |
 | `react-query` | Template ^3.34.19 | Leave on the template's version |
-| `vite` | Template ^5.4.0 (latest 8.3.5) | Leave on the template's version |
+| `vite`, `@vitejs/plugin-react` | 8.3.6, 6.2.1 (the template had ^5.4.0 and 4.2.1) | Upgraded so there is one Vite. `vitest` needs 6.4 or newer, and npm hoists one copy to the root, so two versions left the admin page blank in slice C |
 | `date-fns`, `date-fns-tz` | To confirm at Gate 2 | Shop timezone conversion |
 | **Removed** | `@shopify/polaris`, `i18next` and `formatjs` packages, `stylelint` | Deprecated (F1), or unused as translated text is out of scope |
 
