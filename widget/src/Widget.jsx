@@ -1,5 +1,5 @@
 import { Component } from "preact";
-import { useCallback, useEffect, useRef, useState } from "preact/hooks";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "preact/hooks";
 import { formatCountdown, isUrgent, nextTickDelay } from "../../shared/countdown.js";
 import { allCandidatesOver, isBar, nextWaitDelay, resolveDisplay, resolvePlacement } from "../../shared/display.js";
 import { shouldRefetch } from "../../shared/refetch.js";
@@ -133,6 +133,25 @@ export function Widget({ config, store, counted }) {
     if (placement?.expand) config.root.style.height = `${BOX_HEIGHT[timer.style.size]}px`;
   }, [placement?.expand, timer?.style.size, config.root]);
 
+  const showsBar = Boolean(placement) && isBar(placement.position);
+
+  // A theme ancestor can trap a bar's z-index, so a bar lives on body. See specs/05-widget.md.
+  useLayoutEffect(() => {
+    if (!showsBar || window.Shopify?.designMode) return undefined;
+    const { root } = config;
+    const spacer = document.createElement("div");
+    spacer.style.height = root.style.height;
+    root.replaceWith(spacer);
+    document.body.append(root);
+    root.classList.remove("cdt-root");
+    root.style.display = "contents";
+    return () => {
+      root.style.display = "";
+      root.classList.add("cdt-root");
+      spacer.replaceWith(root);
+    };
+  }, [showsBar, config]);
+
   if (!timer) return null;
   const ended = display.state === "ended";
   if (ended && isBar(placement.position)) return null;
@@ -143,7 +162,8 @@ export function Widget({ config, store, counted }) {
   const classes = `cdt-card cdt-${size} cdt-${placement.position}${urgent ? " cdt-urgent" : ""}`;
 
   return (
-    <div ref={card} class={classes} style={{ "--cdt-bg": backgroundColor, "--cdt-fg": textColor }}>
+    // Keyed so a switch between bar and inline is a new element, not one that moved (a layout shift).
+    <div key={placement.position} ref={card} class={classes} style={{ "--cdt-bg": backgroundColor, "--cdt-fg": textColor }}>
       <div class="cdt-body">
         {ended ? (
           // Keyed so it's a new element. Reusing a row would count as that row moving (a layout shift).

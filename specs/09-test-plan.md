@@ -65,6 +65,7 @@ Recorded with pass or fail before submission.
 | M-24 | Search the repo, built admin assets and widget bundle for the API secret and access tokens | None found | NFR-10 |
 | M-25 | Watch a timer for 5 minutes beside a reference clock, on desktop and phone width | No drift, and the box width and digits don't jitter | NFR-18 |
 | M-26 | Check the Liquid decision for: lead-in, live, expired, evergreen; all, product, collection; product ID 123 against a target of 1234; hint missing; hint overflow | Each reserves space, loads the script or outputs nothing, per [05-widget](05-widget.md#zero-cls-flow) | FR-4, NFR-6 |
+| M-27 | Set a timer to Top bar, then Bottom bar, and view a targeted product on the dev store | The whole countdown is visible, with the header and page content painted beneath it, and no layout movement | FR-6, NFR-6 |
 
 ## Traceability check
 
