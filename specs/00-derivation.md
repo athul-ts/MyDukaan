@@ -70,7 +70,7 @@ PRD sections 1 and 2 also state audience and user classes. These set context and
 | F4 | Evergreen uses localStorage (§4.1), which has no session end, but must reset on "session end" | 30 minutes idle counts as session end | **Decided** |
 | F5 | Widget size is ~15KB (§4.5) vs <30KB (§5.3). Shopify's guidance suggests 10KB compressed JS | Target 15KB, build fails above 30KB, 10KB tracked as advisory | Proposed |
 | F6 | "Single API call" (§5.1) vs impression tracking, which needs a write. A cached read can't count impressions either | One call for config, plus a separate best-effort beacon | Proposed |
-| F7 | "CLI 3.0" and template `^3.0.0` vs current CLI 5.0.1 | Treat 3.0 as the minimum; use current CLI; confirm in S1 | Proposed |
+| F7 | "CLI 3.0" and template `^3.0.0` vs current CLI 5.0.1 | Treat 3.0 as the minimum; use current CLI; confirm in S1. The README states this as an assumption | **Decided** |
 | F8 | The mockup lacks timer type, targeting and evergreen duration, and has one colour where §3 says "colors" | The form has the PRD's fields, inside the mockup's modal. Otherwise the mockup is a style reference | Proposed |
 
 Also noted: §8 reads "48hrs days" with no start date. The user confirmed **24 hours or less** remain.

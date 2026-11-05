@@ -23,7 +23,30 @@ These are platform behaviours that documentation couldn't confirm. Each is time-
 - Upgrade fails: stay on the template's adapter 5.x line and its Express version, with the matching MongoDB session adapter version.
 - Stale session blocks reinstall: when the Admin API rejects a stored token, delete the shop's sessions and send the merchant through authentication.
 
-**Result:** _not run_
+**Result:** _in progress. The parts below ran with dummy credentials on Node 24.22.2; the checks against the real store need a login._
+
+| Question | Result |
+|---|---|
+| 1. Template scaffold | Clones with its submodule. Through `shopify app init` and CLI 5: **not run yet** |
+| 2. Adapter 8, Express 5, MongoDB sessions | **Works** after the code changes below. The server boots, and a session saves and loads from MongoDB |
+| 3. Mongoose and session adapter drivers | **No conflict.** Both resolve to one `mongodb@7.8.0` |
+| 4. Scopes | **Not run yet.** The template asks for `write_products`, which this app shouldn't need |
+| 5. Reinstall and stale sessions | **Not run yet** |
+
+**Template code that must change for these versions:**
+- `app.use("/api/*")` and `app.use("/*")` throw on Express 5. Use `app.use("/api", ...)` and a pathless `app.use(...)`.
+- `LATEST_API_VERSION` no longer exists. Pin `ApiVersion.October26`.
+- Remove the `restResources` import and the SQLite adapter.
+
+**Auth behaviour observed:**
+
+| Request | Auth code flow | Token exchange |
+|---|---|---|
+| API call, invalid token | 401 | 401, with a retry header |
+| API call, no token | 302 to `/api/auth?shop=undefined` | 200, App Bridge HTML |
+| Page load, embedded | Depends on stored session | Loads, with `frame-ancestors` set |
+
+Neither returns the 401 that [04-api](04-api.md#errors) specifies for a missing token, so `/api` needs a small check before the library middleware. The `frame-ancestors` header is set by `shopify.cspHeaders()`, as [07](07-nfr-security.md#http-headers) expects.
 
 ## S2. Theme extension Liquid and metafield (30 min)
 

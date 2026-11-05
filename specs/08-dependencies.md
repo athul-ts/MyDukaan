@@ -8,9 +8,9 @@
 
 | Item | Required | Current on this machine | Action |
 |---|---|---|---|
-| Node.js | **24 LTS** | 25.9.0 (non-LTS) | **Change.** `vitest` excludes Node 25 (`^22.12 \|\| ^24 \|\| >=26`) |
-| npm | Bundled with Node | 11.12.1 | None |
-| Shopify CLI | Current (PRD's 3.0 treated as a minimum, F7) | Not installed | Install; needs Node ≥22.12 |
+| Node.js | **24 LTS** | 24.22.2, through nvm | None. `vitest` excludes Node 25 (`^22.12 \|\| ^24 \|\| >=26`), so stay on 24 for this project |
+| npm | Bundled with Node | 11.19.1 | None. It holds back install scripts not yet allowed, so S1 checks whether esbuild needs allowing |
+| Shopify CLI | Current (PRD's 3.0 treated as a minimum, F7) | 5.0.1 | None |
 | MongoDB | 8.x | **8.3.1 running on :27017** | None |
 | Git, GitHub CLI | Any recent | 2.54.0, 2.92.0 | None |
 | Docker | Not required | 29.4.2 | Not used (user decision) |
@@ -69,7 +69,7 @@ The admin's other template packages stay on the template's versions, because upg
 | Shopify Partner account | App registration, dev store | Exists |
 | Shopify dev store + sample CSV | Testing and demo | **To create** |
 | Cloudflare tunnel | Provided automatically by `shopify app dev` | No setup |
-| GitHub | Submission | **Repo to create** |
+| GitHub | Submission | Exists |
 | Loom | Submission video | **Account to confirm** |
 
 ## Shopify configuration
