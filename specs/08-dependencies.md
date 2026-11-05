@@ -10,7 +10,7 @@
 |---|---|---|---|
 | Node.js | **24 LTS** | 24.22.2, through nvm | None. `vitest` excludes Node 25 (`^22.12 \|\| ^24 \|\| >=26`), so stay on 24 for this project |
 | npm | Bundled with Node | 11.19.1 | None. It holds back install scripts not yet allowed, so S1 checks whether esbuild needs allowing |
-| Shopify CLI | Current (PRD's 3.0 treated as a minimum, F7) | 5.0.1 | None |
+| Shopify CLI | Current (PRD's 3.0 treated as a minimum, F7) | 5.0.1 | None. With a theme extension, `shopify app dev` prompts for the store password, so it must run in an interactive terminal |
 | MongoDB | 8.x | **8.3.1 running on :27017** | None |
 | Git, GitHub CLI | Any recent | 2.54.0, 2.92.0 | None |
 | Docker | Not required | 29.4.2 | Not used (user decision) |
@@ -34,9 +34,9 @@
 | Package | Version | Note |
 |---|---|---|
 | Polaris web components | CDN `polaris-2.js` | Stable 2.x channel, no npm package. Replaces `@shopify/polaris` |
-| App Bridge | CDN `app-bridge.js` | Unversioned; Shopify serves the latest. Provides `shopify.resourcePicker` per **[S4]** |
+| App Bridge | CDN `app-bridge.js` | Unversioned; Shopify serves the latest. Provides `shopify.resourcePicker` (confirmed in S4) |
 | `@shopify/app-bridge-react` | Template ^4.1.3 (latest 4.2.14) | Keep if the template's authenticated fetch and routing need it; otherwise remove |
-| `react`, `react-dom` | Template ^18.2.0 (latest 19.3.1) | Stay on 18. Move to 19 only if S4 requires it, as 19 has native custom element support |
+| `react`, `react-dom` | Template ^18.2.0 (latest 19.3.1) | Stay on 18. S4 showed no need for 19 |
 | `react-router-dom` | Template ^6.3.0 (latest 7.18.5) | Leave on the template's version |
 | `react-query` | Template ^3.34.19 | Leave on the template's version |
 | `vite` | Template ^5.4.0 (latest 8.3.5) | Leave on the template's version |
@@ -49,7 +49,7 @@ The admin's other template packages stay on the template's versions, because upg
 
 | Package | Latest | Note |
 |---|---|---|
-| `preact` | 11.1.1 | Measure actual size in S2. Fall back to 10.x if it threatens the 15KB target |
+| `preact` | 11.1.1 | A test widget was 5.78KB gzipped in S2 (5.52KB on 10.29.8), so there's no need for 10.x |
 | `esbuild` | 0.28.2 | Dev only. Produces the minified IIFE bundle |
 
 ## Quality
@@ -78,7 +78,7 @@ To be finalized in S1 and S2, in `shopify.app.toml`:
 
 ```toml
 [access_scopes]
-scopes = ""  # Least privilege. S2 confirms whether read_products is needed
+scopes = ""  # S1, S2 and S4: shop timezone, metafield writes and the resource picker need none
 
 [app_proxy]
 url = "<app url>/proxy"

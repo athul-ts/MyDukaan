@@ -39,7 +39,7 @@ Product page request → block Liquid reads hint, compares with product + now
 
 ### Metafield hint
 
-An app-owned JSON metafield, namespace `$app:countdown`, key `timer_hint`, on the app installation. **[S2]** confirms the namespace, read path and required scopes.
+An app-owned JSON metafield, namespace `countdown`, key `timer_hint`, on the app installation. Liquid reads it as `app.metafields.countdown.timer_hint.value`. It needs no access scopes (confirmed in S2).
 
 ```json
 { "v": 1, "t": [
@@ -56,7 +56,7 @@ An app-owned JSON metafield, namespace `$app:countdown`, key `timer_hint`, on th
 
 **Built by** `buildHint(timers, now)` in `shared/`: excludes expired timers, and sorts entries in [selection order](02-domain-rules.md#selection) so the first Liquid match is the likely winner. It contains no merchant text.
 
-**Size cap:** if the serialized hint exceeds 256KB, the app writes `{"v": 1, "overflow": true}` instead, and Liquid treats that as a missing hint. **[S2]** tests the read path and render time at the cap, and can lower it.
+**Size cap:** Shopify rejects a JSON metafield above 131,072 bytes. If the serialized hint exceeds 120KB, the app writes `{"v": 1, "overflow": true}` instead, and Liquid treats that as a missing hint. In S2, a 127KB hint with 34 entries added no measurable render time.
 
 **Written on** every timer create, update and delete, and after authentication, using `metafieldsSet`. It's rebuilt from MongoDB each time, with writes queued per shop.
 
@@ -165,4 +165,4 @@ The height is fixed, not a minimum. Headline and description are clamped to one 
 
 ## Build
 
-`esbuild` bundles `widget/src/index.jsx` with Preact into a minified IIFE at `extensions/countdown-timer/assets/countdown-timer.js`. `npm run check:size` fails above 30KB gzipped, reports against the 15KB target, and notes Shopify's 10KB advisory. The widget imports only status, selection and evergreen functions from `shared/`, never zod.
+`esbuild` bundles `widget/src/index.jsx` with Preact into a minified IIFE at `extensions/countdown-timer/assets/countdown-timer.js`. The extension also needs a `locales/` folder, or `shopify app dev` logs errors. `npm run check:size` fails above 30KB gzipped, reports against the 15KB target, and notes Shopify's 10KB advisory. The widget imports only status, selection and evergreen functions from `shared/`, never zod.

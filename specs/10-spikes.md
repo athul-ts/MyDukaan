@@ -55,7 +55,7 @@ Neither returns the 401 that [04-api](04-api.md#errors) specifies for a missing 
 2. Can it read a JSON app-owned metafield through `app.metafields`, and loop over an array in it?
 3. What are the correct namespace and owner for `metafieldsSet`, and does it need a scope?
 4. Does Liquid's `contains` behave correctly on the delimited ID strings?
-5. Do reading and looping over a 256KB hint work, and what do they add to render time?
+5. Do reading and looping over a hint at the size cap work, and what do they add to render time?
 6. After a metafield write, how long does the storefront take to reflect it through Shopify's page cache?
 
 **Method:** write a sample hint through GraphQL, and render diagnostic values from a test block.
@@ -64,7 +64,18 @@ Neither returns the 401 that [04-api](04-api.md#errors) specifies for a missing 
 
 **Fallback:** reserve fixed height on all product pages, and drop the hint. This reverses decision F3 in effect, so **the user is told** before the change is made.
 
-**Result:** _not run_
+**Result:** done, on your store's Horizon theme.
+
+| Question | Result |
+|---|---|
+| 1. Liquid objects | **Works.** `product.id`, `product.collections` and `'now' \| date: '%s'` all read correctly |
+| 2. Metafield read | **Works** as `app.metafields.countdown.timer_hint.value`, including looping over the array |
+| 3. Namespace, owner, scope | Owner is the app installation. **No scopes needed.** Namespace `countdown` is read and tested. `$app:countdown` also writes, stored as `app--443890728961--countdown`, but its read path wasn't tested, so the spec uses `countdown` |
+| 4. `contains` on delimited IDs | **Correct.** Exact product and collection IDs match. IDs one digit longer or shorter don't |
+| 5. Hint at the size cap | **Shopify's limit is 131,072 bytes**, not the 256KB first assumed. A 127KB hint with 34 entries added no measurable time: median processing 25ms, against 30ms for 2 entries |
+| 6. Metafield to storefront delay | **About 6 seconds,** which is the polling interval. Measured on a password-protected dev store, so public page caching could be slower |
+
+Window and match decisions were all correct for evergreen, expired, live, lead-in, future and non-matching entries. The overflow marker reads correctly, and an overflow hint has no `t` array.
 
 ## S3. App proxy behaviour (30 min)
 
@@ -87,7 +98,19 @@ Neither returns the 401 that [04-api](04-api.md#errors) specifies for a missing 
 - No trustworthy IP: per-shop rate limit only.
 - Customisable path: add a block setting for the path, defaulting to `/apps/countdown`.
 
-**Result:** _not run_
+**Result:** done.
+
+| Question | Result |
+|---|---|
+| 1. Caching | **Works.** `Cache-Control` and `ETag` reach the browser. A repeat request came from the browser cache, with transfer size 0 |
+| 2. Signature | **Valid** on every proxied request with the spec's method. An unsigned request returned 401 |
+| 3. Beacon | **Works,** arriving as `text/plain;charset=UTF-8` |
+| 4. Password-protected store | **Works** once the visitor has entered the password |
+| 5. Visitor IP | `X-Forwarded-For` held the visitor's IP first, then a Cloudflare address from the dev tunnel. Not documented as trustworthy, so limits stay per shop |
+| 6. Latency | 643ms for one request from the browser, through Shopify and the dev tunnel, so not a measure of server time |
+| 7. Path | `/apps/countdown` works. `/en/apps/countdown` returned 404 on this single-language store, so locale prefixes are **not tested**. Whether merchants can customise the path is **not confirmed**, so this goes in the README as a known limit |
+
+Proxied requests carry `shop`, `logged_in_customer_id`, `path_prefix`, `timestamp` and `signature`, and no cookies. The CLI says prefix and subpath changes only apply to new installs, though this proxy did work on the existing install.
 
 ## S4. Polaris web components in React (30 min)
 
@@ -108,12 +131,23 @@ Neither returns the 401 that [04-api](04-api.md#errors) specifies for a missing 
 - No time component: `s-text-field` with time format validation.
 - Picker can't stack over the modal: close the modal during selection and reopen it, keeping form state in React.
 
-**Result:** _not run_
+**Result:** done, on React 18.3.1 inside the embedded admin.
+
+| Question | Result |
+|---|---|
+| 1. `s-*` under React 18 | **Works.** State set from React reaches each field's value. `s-button`'s `onClick` fires. Field changes arrive through `input` and `change` listeners on a `ref`, so a small wrapper component is all that's needed, and no move to React 19 |
+| 2. Time input | **No time component.** `s-time-field` and `s-time-picker` don't exist. Use `s-text-field` with HH:mm validation |
+| 3. Components | All present and working in the form: `s-text-field`, `s-text-area`, `s-date-field`, `s-color-field`, `s-select`, `s-number-field`, `s-choice-list`, `s-modal`. Rendered: `s-table` and its row and cell parts, `s-badge`, `s-banner`. `s-menu` is present but untested. `s-skeleton-paragraph` doesn't exist, so use `s-spinner` for loading |
+| 4. Resource picker | **Works** through the CDN script with **no scopes,** for products and collections. Returns `{id, title}` with GIDs |
+| 5. Picker over the modal | **Works.** It stacks on top of the open modal, so the close-and-reopen fallback isn't needed |
+| 6. Session token | The global `fetch` attaches it automatically with the CDN App Bridge script, so the template's authenticated fetch hook isn't needed. The 401 path wasn't exercised in the browser |
+
+`s-choice-list` reports its selection through `values` (an array), not `value`. Passing another resource type's IDs in `selectionIds` makes the picker show "Server error", so products and collections must keep separate lists. Opening the modal with `commandFor` works.
 
 ## Also verified along the way
 
 | Item | During | Result |
 |---|---|---|
-| `helmet` config doesn't break admin embedding | S1 | _not run_ |
-| Preact 11 size against the 15KB target | S2 | _not run_ |
-| `shopify://admin/themes/current/editor` deep link format | S2 | _not run_ |
+| `helmet` config doesn't break admin embedding | S1 | `shopify.cspHeaders()` sets `frame-ancestors` and the app loads embedded. Not yet run with `helmet` added, so slice A confirms it |
+| Preact 11 size against the 15KB target | S2 | 5.78KB gzipped for a small test widget |
+| `shopify://admin/themes/current/editor` deep link format | S2 | The `https://admin.shopify.com/store/{store}/themes/current/editor?template=product&addAppBlockId={client_id}/{block_handle}` form added the block, in its own section. The `shopify://` form still needs testing from inside the app |

@@ -2,7 +2,7 @@
 
 **Status:** Approved (Gate 1, 2026-11-05) | **Implements:** FR-5, 6, 8, 9, 10, 18; NFR-17
 
-React and Vite from the template, embedded with App Bridge. Screens use **Polaris web components** loaded by CDN (`polaris-2.js`, `app-bridge.js`). `@shopify/polaris` is removed, and the template's sample pages are deleted. **[S4]** confirms how `s-*` elements behave under React 18.
+React and Vite from the template, embedded with App Bridge. Screens use **Polaris web components** loaded by CDN (`polaris-2.js`, `app-bridge.js`). `@shopify/polaris` is removed, and the template's sample pages are deleted. S4 confirmed `s-*` elements work under React 18.
 
 ## Routes
 
@@ -25,7 +25,7 @@ Layout follows the mockup's "Countdown Timer Manager" with a **Create timer** pr
 | Actions | "⋯" menu: Edit, Delete. The delete confirmation warns that the impression count is lost too |
 
 **States:**
-- **Loading:** skeleton
+- **Loading:** spinner
 - **Empty:** explains timers and links to create one
 - **Error:** banner with retry
 - **Hint sync failed:** warning banner with a **Retry** action, shown on every load while the list reports `hintSync: "failed"`. It explains that storefront timers may be out of date
@@ -37,20 +37,20 @@ Layout follows the mockup's "Countdown Timer Manager" with a **Create timer** pr
 
 **A modal, as in the mockup** (user decision), using `s-modal`. Create and edit share it, titled "Create New Timer" or "Edit timer", with Cancel and a primary button in the footer. The form is longer than the mockup because it adds type and targeting, so the modal body scrolls.
 
-**[S4]** checks that the resource picker opens above the modal. If it doesn't, the modal closes while the picker is open and reopens with the selection, keeping all form values in React state.
+The resource picker opens above the modal (confirmed in S4), so no workaround is needed.
 
 | Section | Fields | Component |
 |---|---|---|
 | Basics | Name, Headline, Promotion description | `s-text-field`, `s-text-area` |
 | Type | Fixed or Evergreen; switching shows the relevant fields | `s-choice-list` |
-| Schedule (fixed) | Start date and time, End date and time | `s-date-field`; time input per **[S4]** |
+| Schedule (fixed) | Start date and time, End date and time | `s-date-field`, and `s-text-field` with HH:mm validation, as no time component exists (S4) |
 | Schedule (evergreen) | Duration, with minutes or hours unit | `s-number-field` |
 | Targeting | All, Products or Collections; a picker button and a removable selected list | `s-choice-list`, `shopify.resourcePicker` |
 | Appearance | Background colour, Text colour, Size, Position | `s-color-field`, `s-select` |
 | Urgency | Urgency notification: None or Colour pulse; threshold in minutes | `s-select`, `s-number-field` |
 | Preview | Static preview of colours, text and size, which hides the description on `small` | Plain HTML |
 
-Component names are from Shopify's index and **[S4]** verifies each. Polaris web components are authored as custom elements; if React 18 can't pass props or events properly, the fallback is thin wrapper components.
+S4 verified these components. Under React 18, a thin wrapper passes values as props and listens for `input` and `change` on a `ref`. `s-choice-list` reports through `values`, not `value`. Loading states use `s-spinner`, as `s-skeleton-paragraph` doesn't exist. Keep product and collection selections separate, because passing the wrong type in `selectionIds` makes the picker fail.
 
 ### Resource picker
 
@@ -77,7 +77,7 @@ The shared zod schema runs on submit and on field blur. Errors appear inline, an
 
 ## Calling the API
 
-Using the template's authenticated fetch, which attaches the session token. A small API client unwraps the [error shape](04-api.md#errors). A 401 follows App Bridge's re-auth flow. **[S4]** confirms how both of these work with the CDN App Bridge script. Mutations refetch the list.
+Using the global `fetch`, which the CDN App Bridge script patches to attach the session token (confirmed in S4). A small API client unwraps the [error shape](04-api.md#errors). A 401 follows App Bridge's re-auth flow. Mutations refetch the list.
 
 ## Mockup reference
 

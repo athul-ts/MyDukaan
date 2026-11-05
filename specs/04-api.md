@@ -57,7 +57,7 @@ These fields are an **explicit allowlist**, built by a dedicated serializer. `na
 
 ### `POST /proxy/impressions`
 
-Body `{"timerId": "..."}`. Accepts `text/plain` as well as JSON, since `sendBeacon` may send either. Returns 202 with no body after checking the timer belongs to the signed shop. An unknown or malformed timer ID returns 404, and malformed JSON returns 400. The widget ignores both. **[S3]** confirms POST through the proxy.
+Body `{"timerId": "..."}`. Accepts `text/plain` as well as JSON, since `sendBeacon` may send either. Returns 202 with no body after checking the timer belongs to the signed shop. An unknown or malformed timer ID returns 404, and malformed JSON returns 400. The widget ignores both. S3 confirmed `sendBeacon` POSTs pass through the proxy, arriving as `text/plain;charset=UTF-8`.
 
 ## Proxy signature verification
 
@@ -100,7 +100,7 @@ A merchant edit typically reaches visitors within 30 seconds. A visitor revisiti
 
 The URL's `collectionIds` are sorted in Liquid so one product has one cache key.
 
-**[S3]** confirms these headers survive the proxy. If they don't, the widget falls back to a 30 second `sessionStorage` cache.
+S3 confirmed these headers reach the browser, and that a repeat request is served from its cache, so no `sessionStorage` fallback is needed.
 
 ## Rate limiting
 
@@ -109,10 +109,10 @@ The URL's `collectionIds` are sorted in Liquid so one product has one cache key.
 | Route group | Limit | Key |
 |---|---|---|
 | `/api/*` | 120 per minute | Shop from session |
-| `GET /proxy/timers` | 3000 per minute | Shop, plus client IP at 60 per minute if **[S3]** confirms one is available |
-| `POST /proxy/impressions` | 3000 per minute | Same as above |
+| `GET /proxy/timers` | 3000 per minute | Shop |
+| `POST /proxy/impressions` | 3000 per minute | Shop |
 
-Storefront limits are generous per shop because all of a shop's visitors share that key, and a false limit only hides a timer. On 429 the widget renders nothing and doesn't retry. Moving to a shared Redis store for multiple instances is documented in the README.
+S3 showed the visitor's IP inside `X-Forwarded-For`, but no Shopify documentation says it can be trusted, so limits aren't per visitor. Storefront limits are generous per shop because all of a shop's visitors share that key, and a false limit only hides a timer. On 429 the widget renders nothing and doesn't retry. Moving to a shared Redis store for multiple instances is documented in the README.
 
 ## Webhooks
 

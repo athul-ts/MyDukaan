@@ -15,7 +15,7 @@ Run with `npm test`. Unit tests inject `now`. Integration tests use the `countdo
 | T-5 | Proxy HMAC | Valid; tampered parameter; wrong secret; missing signature; repeated parameter joined by comma | NFR-8 |
 | T-6 | Tenant isolation (integration) | Shop B gets 404 on read, update, delete of shop A's timer; list excludes it; impressions can't be posted across shops | NFR-11 |
 | T-7 | Public serializer (integration) | Exact allowlisted keys. `name`, `shop`, targeting and impressions absent | NFR-10 |
-| T-8 | `buildHint` | Excludes expired; order matches selection; delimiters prevent partial ID matches; contains no merchant text; over 256KB writes the overflow marker | NFR-6, FR-4 |
+| T-8 | `buildHint` | Excludes expired; order matches selection; delimiters prevent partial ID matches; contains no merchant text; over 120KB writes the overflow marker | NFR-6, FR-4 |
 | T-9 | API (integration) | Status codes and error shape for 400, 401, 404, 422, 429; unauthenticated rejection; `q` regex escaping; cache headers on success and errors; ETag 304 | FR-16, NFR-3, 12, 13 |
 | T-10 | Target query (integration) | All, product and collection scopes, with `sanitizeFilter` on; expired excluded; up to 3 returned, ranked; a live timer is always included | FR-4, 13 |
 | T-11 | `isUrgent`, countdown formatter | Threshold boundary; `none` mode; days omitted when zero | FR-7, NFR-18 |
