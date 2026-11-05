@@ -4,6 +4,12 @@ export function isUrgent(remainingMs, urgency) {
   return urgency.mode !== "none" && remainingMs <= urgency.thresholdMinutes * MINUTE_MS;
 }
 
+/** Waits for the displayed second to change, so ticks can't drift from the real end time. */
+export function nextTickDelay(remainingMs) {
+  if (remainingMs <= 0) return 1;
+  return remainingMs % 1000 || 1000;
+}
+
 const pad = (value) => String(value).padStart(2, "0");
 
 /** HH:MM:SS, with days added in front only when there are any. Rounds up, so 0 means ended. */

@@ -18,8 +18,8 @@
 | `mongoose` | 9.12.0, with `mongodb` 7.8.0 | Ran with the adapter |
 | `react`, `react-dom` | 18.3.1 | Ran S4 |
 | Polaris web components | `polaris-2.js` (CDN stable channel) | Ran S4 |
-| `preact` | 11.1.1 | Bundle measured only |
-| `esbuild` | 0.28.2 | Bundle measured only |
+| `preact` | 11.1.1 | Runs in the widget (slice D) |
+| `esbuild` | 0.28.2 | Builds the widget (slice D) |
 | `zod` | 4.6.7 | **Not installed yet** |
 | `helmet` | 8.3.0 | Ran in the admin in slice A |
 | `express-rate-limit` | 8.7.3 | **Not installed yet** |

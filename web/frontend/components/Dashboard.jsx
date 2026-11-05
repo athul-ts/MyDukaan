@@ -68,7 +68,7 @@ export function Dashboard() {
   const data = timers.data;
   const hasFilters = Boolean(q) || status !== ALL_STATUSES;
   const isEmptyShop = data && data.total === 0 && !hasFilters;
-  const blockLink = `shopify://admin/themes/current/editor?template=product&addAppBlockId=${shopify.config.apiKey}/${BLOCK_HANDLE}`;
+  const blockLink = `shopify://admin/themes/current/editor?template=product&addAppBlockId=${shopify.config.apiKey}/${BLOCK_HANDLE}&target=mainSection`;
 
   const filters = (
     <s-stack slot="filters" direction="inline" gap="small">

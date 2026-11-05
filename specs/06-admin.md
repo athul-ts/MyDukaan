@@ -31,7 +31,7 @@ Layout follows the mockup's "Countdown Timer Manager" with a **Create timer** pr
 - **Hint sync failed:** warning banner with a **Retry** action, shown on every load while the list reports `hintSync: "failed"`. It explains that storefront timers may be out of date
 - **Paged:** 20 per page
 
-**Cuttable:** search and status filter and sort (FR-8a), overlap warning (FR-8b), theme editor link (FR-18). The link format is `shopify://admin/themes/current/editor?template=product&addAppBlockId={api_key}/{block_handle}`, confirmed in S2.
+**Cuttable:** search and status filter and sort (FR-8a), overlap warning (FR-8b), theme editor link (FR-18). The link format is `shopify://admin/themes/current/editor?template=product&addAppBlockId={api_key}/{block_handle}&target=mainSection`, confirmed in S2.
 
 ## Form
 

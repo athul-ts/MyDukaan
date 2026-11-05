@@ -155,6 +155,7 @@ The height is fixed, not a minimum. Headline and description are clamped to one 
 ## Styling
 
 - All classes are prefixed `cdt-`, with no resets or global selectors.
+- Themes such as Horizon shrink the block wrapper to its content, so `width:100%` on the root alone collapses the box and lets its width follow the digits. `:has(>.cdt-root)` makes that one parent fill the column. It is the only rule that touches a theme element. If a browser or theme ignores it, the box is narrower but the page stays intact. Don't give the root a large intrinsic width such as `100vw`: it stretches the wrapper and makes the whole page scroll sideways, as seen on the dev store.
 - Size CSS is inlined in the block so the reservation applies before external CSS loads.
 - Colours are set through CSS custom properties from the validated hex values.
 - Shadow DOM isn't used: prefixed classes are enough here, and it adds complexity with little benefit.
@@ -168,3 +169,22 @@ The height is fixed, not a minimum. Headline and description are clamped to one 
 ## Build
 
 `esbuild` bundles `widget/src/index.jsx` with Preact into a minified IIFE at `extensions/countdown-timer/assets/countdown-timer.js`. The extension also needs a `locales/` folder, or `shopify app dev` logs errors. `npm run check:size` fails above 30KB gzipped, reports against the 15KB target, and notes Shopify's 10KB advisory. The widget imports only status, selection and evergreen functions from `shared/`, never zod.
+
+## Theme editor
+
+Merchants need to see that a block they just added is working, even on a product no timer targets. When `request.design_mode` is true and no timer matches, Liquid outputs a short fixed note in place of nothing. Shoppers never see it, and it contains no merchant text. The widget also remounts on `shopify:section:load`, only in the editor, because the editor replaces section HTML without re-running scripts.
+
+## Root element
+
+The script reads these from the root that Liquid outputs:
+
+| Attribute | Meaning |
+|---|---|
+| `data-reserved` | Height reserved in pixels, `0` for a bar or a missing hint |
+| `data-hint-missing` | Present when the hint is missing, unreadable or over its cap. An inline timer may then expand the box, which is the accepted rare shift |
+| `data-bar` | The bar Liquid chose. An inline timer with no reserved box and a readable hint renders as this bar, so it can't cause a shift |
+
+## Changelog
+
+- 2026-11-05: Slice D. Added the theme editor note and remount, and the root attributes that separate a missing hint from a chosen bar. The theme editor link gains `target=mainSection`. Decisions F5, G5, G6, G10, G11, G12 and G13 confirmed.
+- 2026-11-05: Root width changed after the dev store showed a collapsed box on Horizon, then changed again because the first fix caused sideways scrolling.

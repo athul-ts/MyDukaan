@@ -49,12 +49,12 @@ Total is about 19h, leaving a small buffer.
 | A. Foundation | Scaffold with `shopify app init` into a temporary folder and copy across, keeping this repo's `.git` and `CLAUDE.md`; apply the code changes from [S1](specs/10-spikes.md#s1-scaffold-and-backend-versions-45-min); ESLint, Mongo, env template | NFR-14, 16, 17 | App loads in the dev store admin | Done |
 | B. Domain + API | `shared/` rules, repositories, validators, admin routes, proxy HMAC, rate limits, hint sync | FR-1, 2, 4, 11, 14, 16; NFR-2, 3, 8-13, 15 | Unit and integration tests pass | Done |
 | C. Admin | Dashboard, form, resource picker, timezone handling, error states | FR-4-10, 18 | Full timer lifecycle works in the admin | Done |
-| D. Widget | Theme extension, Liquid hint logic, Preact bundle, size check, beacon | FR-2, 7, 11-15; NFR-1, 4, 6, 7, 18 | Timer renders on the storefront with CLS 0 | Not started |
+| D. Widget | Theme extension, Liquid hint logic, Preact bundle, size check, beacon | FR-2, 7, 11-15; NFR-1, 4, 6, 7, 18 | Timer renders on the storefront with CLS 0 | In progress: built, not yet checked on the store |
 | E. Hardening + docs | Edge-case pass, performance measurement, README, API docs, requirement matrix | NFR-5; DEL-1-5 | [Test plan](specs/09-test-plan.md) passes | Not started |
 
 ## Deferred resolutions
 
-The user chose to decide these when each is reached. **Before starting the step, remind the user of its items and wait for an answer.** Until then, the rule in [00-derivation](specs/00-derivation.md) is the working assumption.
+The user chose to decide these when each is reached. Slice D's items were confirmed as written on 2026-11-05. **Before starting the step, remind the user of its items and wait for an answer.** Until then, the rule in [00-derivation](specs/00-derivation.md) is the working assumption.
 
 | Before | Item | Question |
 |---|---|---|
