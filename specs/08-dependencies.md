@@ -95,7 +95,7 @@ The admin's other template packages stay on the template's versions, because upg
 | Shopify dev store + sample CSV | Testing and demo | Exists, with `Timer Test` collection |
 | Cloudflare tunnel | Provided automatically by `shopify app dev` | No setup |
 | GitHub | Submission | Exists |
-| Loom | Submission video | **Account to confirm** |
+| Loom | Submission video | Recorded and submitted |
 
 ## Shopify configuration
 

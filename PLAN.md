@@ -10,11 +10,11 @@ Spec-driven delivery of the Countdown Timer + Analytics Shopify app, with **24 h
 |---|---|---|---|---|
 | 1. Write spec pack | `specs/`, `PLAN.md`, `CLAUDE.md`, `.claude/` | Claude | 1.5h | Done |
 | **Gate 1: spec review** | Comments resolved, specs set to `Approved` | **User** | 0.5h | **Cleared 2026-11-05** |
-| 2. Prerequisites | Checklist below | **User** | 0.5h | In progress |
+| 2. Prerequisites | Checklist below | **User** | 0.5h | Done |
 | 3. Spikes S1-S4 | [specs/10-spikes.md](specs/10-spikes.md) filled in, specs amended | Claude + user logins | 2h | Done |
 | **Gate 2: dependencies cleared** | Versions pinned, spikes closed, specs marked v1.0 | **User** | 0.25h | **Cleared 2026-11-05** |
-| 4. Build slices A-E | Code, tests, commits per slice | Claude | 12h | In progress (Slices A-D done, E started) |
-| 5. Docs and Loom | README, API docs, 10-15 min recording | Claude drafts, **user** records | 2h | Not started |
+| 4. Build slices A-E | Code, tests, commits per slice | Claude | 12h | Done 2026-11-06 |
+| 5. Docs and Loom | README, API docs, 10-15 min recording | Claude drafts, **user** records | 2h | Done: README and API docs written, Loom recorded and submitted |
 
 Total is about 19h, leaving a small buffer.
 
@@ -40,7 +40,7 @@ Total is about 19h, leaving a small buffer.
 - [x] Development store (`mydukaan-bc2ubatx.myshopify.com`), with sample products and a `Timer Test` collection
 - [x] App registration (`MyDukaan`, linked through the CLI)
 - [x] GitHub repo for submission
-- [ ] Loom account
+- [x] Loom account
 
 ## Build slices (after Gate 2)
 
@@ -50,7 +50,7 @@ Total is about 19h, leaving a small buffer.
 | B. Domain + API | `shared/` rules, repositories, validators, admin routes, proxy HMAC, rate limits, hint sync | FR-1, 2, 4, 11, 14, 16; NFR-2, 3, 8-13, 15 | Unit and integration tests pass | Done |
 | C. Admin | Dashboard, form, resource picker, timezone handling, error states | FR-4-10, 18 | Full timer lifecycle works in the admin | Done |
 | D. Widget | Theme extension, Liquid hint logic, Preact bundle, size check, beacon | FR-2, 7, 11-15; NFR-1, 4, 6, 7, 18 | Timer renders on the storefront with CLS 0 | Done 2026-11-06 on the dev store, including the bar fix in the theme editor |
-| E. Hardening + docs | Edge-case pass, performance measurement, README, API docs, requirement matrix | NFR-5; DEL-1-5 | [Test plan](specs/09-test-plan.md) passes | In progress: `perf:proxy` passes (p95 11.6ms server-side) |
+| E. Hardening + docs | Edge-case pass, performance measurement, README, API docs, requirement matrix | NFR-5; DEL-1-5 | [Test plan](specs/09-test-plan.md) passes | Done 2026-11-06: `perf:proxy` passes (p95 11.6ms server-side). On the store, M-6, M-22 and M-25 weren't run and five checks are partial; see the [test plan results](specs/09-test-plan.md#results) |
 
 ## Deferred resolutions
 

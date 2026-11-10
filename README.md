@@ -52,7 +52,7 @@ The CLI supplies `SHOPIFY_API_KEY`, `SHOPIFY_API_SECRET`, `SCOPES` and `HOST`. T
 | Command | What it does |
 |---|---|
 | `npm run dev` | Runs the app through the Shopify CLI |
-| `npm test` | Runs 184 unit and integration tests. Integration tests need the local MongoDB, and use their own `countdown_timer_test` database |
+| `npm test` | Runs 202 unit and integration tests. Integration tests need the local MongoDB, and use their own `countdown_timer_test` database |
 | `npm run lint` | ESLint |
 | `npm run build:widget` | Builds the widget into `extensions/countdown-timer/assets/countdown-timer.js`. The built file is committed, so run this after changing `widget/` or the shared rules it uses |
 | `npm run check:size` | Builds the widget and fails if it exceeds 30KB gzipped |

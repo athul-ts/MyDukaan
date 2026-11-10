@@ -73,13 +73,15 @@ Recorded 2026-11-06. "Store" is the dev store `mydukaan-bc2ubatx` on the Horizon
 
 ### Automated
 
+`npm test` and `npm run lint` were re-run on 2026-11-10, after the time picker and timezone validation commits added 18 unit tests. A-2 and A-3 are from 2026-11-06, and the widget and server code haven't changed since.
+
 | ID | Result | Evidence |
 |---|---|---|
-| T-1 to T-15 | Pass | `npm test`: 184 tests in 9 files |
+| T-1 to T-15 | Pass | `npm test`: 202 tests in 9 files |
 | A-1 | Pass | `npm run lint`: no errors |
 | A-2 | Pass | 9.56KB JS + CSS gzipped (JS 8.92KB) |
 | A-3 | Pass | p95 11.6ms server-side, 2000 requests, 10 concurrent, 200 timers |
-| A-4 | Pass | 184 tests: 125 unit tests in `tests/unit` and 59 integration tests |
+| A-4 | Pass | 202 tests: 143 unit tests in `tests/unit` and 59 integration tests |
 
 ### Manual
 
